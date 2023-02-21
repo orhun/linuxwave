@@ -9,7 +9,8 @@ const random_file = "/dev/urandom";
 pub fn main() !void {
     std.debug.print("{s}\n", .{text});
 
-    const buffer = try file.readBytes(random_file, 128);
+    var buf: [128]u8 = undefined;
+    const buffer = try file.readBytes(random_file, &buf);
 
     std.debug.print("{d}\n", .{buffer});
 

@@ -1,6 +1,6 @@
 const std = @import("std");
 
-pub fn build(b: *std.build.Builder) void {
+pub fn build(b: *std.build.Builder) !void {
     // Standard target options allows the person running `zig build` to choose
     // what target to build for. Here we do not override the defaults, which
     // means any target is allowed, and the default is native. Other options
@@ -25,10 +25,15 @@ pub fn build(b: *std.build.Builder) void {
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
 
-    const exe_tests = b.addTest("src/wav.zig");
-    exe_tests.setTarget(target);
-    exe_tests.setBuildMode(mode);
-
-    const test_step = b.step("test", "Run WAV tests");
-    test_step.dependOn(&exe_tests.step);
+    const test_step = b.step("test", "Run tests");
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    const allocator = gpa.allocator();
+    for ([_][]const u8{ "wav", "file" }) |module| {
+        const test_module = try std.fmt.allocPrint(allocator, "src/{s}.zig", .{module});
+        defer allocator.free(test_module);
+        var exe_tests = b.addTest(test_module);
+        exe_tests.setTarget(target);
+        exe_tests.setBuildMode(mode);
+        test_step.dependOn(&exe_tests.step);
+    }
 }
