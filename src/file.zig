@@ -1,3 +1,5 @@
+//! File operations helper.
+
 const std = @import("std");
 
 /// Reads the given file and returns a byte array with the length of `len`.
