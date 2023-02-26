@@ -26,7 +26,7 @@ pub fn main() !void {
     }
 
     const stdout = std.io.getStdOut().writer();
-    try wav.Saver(@TypeOf(stdout)).save(stdout, data.toOwnedSlice(), .{
+    try wav.Encoder(@TypeOf(stdout)).encode(stdout, data.toOwnedSlice(), .{
         .num_channels = 1,
         .sample_rate = 24000,
         .format = .signed16_lsb,
