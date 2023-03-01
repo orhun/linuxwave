@@ -11,20 +11,24 @@ pub fn build(b: *std.build.Builder) !void {
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall.
     const mode = b.standardReleaseOptions();
 
+    // Add main executable.
     const exe = b.addExecutable("linuxwave", "src/main.zig");
     exe.setTarget(target);
     exe.setBuildMode(mode);
     exe.install();
 
+    // Create the run step and add arguments
     const run_cmd = exe.run();
     run_cmd.step.dependOn(b.getInstallStep());
     if (b.args) |args| {
         run_cmd.addArgs(args);
     }
 
+    // Define the run step.
     const run_step = b.step("run", "Run the app");
     run_step.dependOn(&run_cmd.step);
 
+    // Add tests.
     const test_step = b.step("test", "Run tests");
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const allocator = gpa.allocator();
