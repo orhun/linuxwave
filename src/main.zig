@@ -30,6 +30,7 @@ pub fn main() !void {
     var data = std.ArrayList(u8).init(allocator);
     for (buffer) |v| {
         var gen_data = try generator.generate(allocator, v);
+        defer allocator.free(gen_data);
         try data.appendSlice(gen_data);
     }
 

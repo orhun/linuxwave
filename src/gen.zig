@@ -31,3 +31,18 @@ pub fn Generator(
         }
     };
 }
+
+test "generate music" {
+    const generator = Generator(&[_]f32{ 0, 1 }, 440, 100);
+    const allocator = std.testing.allocator;
+
+    var data1 = try generator.generate(allocator, 'a');
+    defer allocator.free(data1);
+    try std.testing.expectEqualSlices(u8, &[_]u8{ 127, 145, 163, 181, 197, 212, 225, 235 }, data1[0..8]);
+    try std.testing.expect(data1.len == 10001);
+
+    var data2 = try generator.generate(allocator, 'b');
+    defer allocator.free(data2);
+    try std.testing.expectEqualSlices(u8, &[_]u8{ 127, 144, 161, 178, 193, 208, 221, 232 }, data2[0..8]);
+    try std.testing.expect(data2.len == 10001);
+}
