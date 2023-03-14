@@ -7,8 +7,8 @@ const build_options = @import("build_options");
 
 // Banner text.
 const banner = "【ｌｉｎｕｘｗａｖｅ】";
-// File to read.
-const source_file = "/dev/urandom";
+// Default input file.
+const default_input = "/dev/urandom";
 // Default output file.
 const default_output = "output.wav";
 // Semitones from the base note in a major musical scale.
@@ -19,7 +19,8 @@ const frequency: f32 = 440;
 const volume: u8 = 50;
 // Parameters that the program can take.
 const params = clap.parseParamsComptime(
-    \\-o, --output  <FILE>    Sets the output file.
+    \\-i, --input   <FILE>    Sets the input file [default: /dev/urandom]
+    \\-o, --output  <FILE>    Sets the output file [default: output.wav]
     \\-V, --version           Display version information.
     \\-h, --help              Display this help and exit.
 );
@@ -43,8 +44,9 @@ pub fn main() !void {
     }
 
     // Read data from a file.
+    const input_file = if (cli.args.input) |input| input else default_input;
     var buf: [64]u8 = undefined;
-    const buffer = try file.readBytes(source_file, &buf);
+    const buffer = try file.readBytes(input_file, &buf);
     std.debug.print("{d}\n", .{buffer});
 
     // Generate music.
