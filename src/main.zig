@@ -33,7 +33,13 @@ pub fn main() !void {
     const parsers = comptime .{
         .FILE = clap.parsers.string,
     };
-    const cli = try clap.parse(clap.Help, &params, parsers, .{});
+    var diag = clap.Diagnostic{};
+    const cli = clap.parse(clap.Help, &params, parsers, .{
+        .diagnostic = &diag,
+    }) catch |err| {
+        diag.report(stderr, err) catch {};
+        return err;
+    };
     defer cli.deinit();
     if (cli.args.help) {
         try stderr.print("{s}\n", .{banner});
