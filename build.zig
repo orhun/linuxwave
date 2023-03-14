@@ -1,5 +1,11 @@
 const std = @import("std");
 
+/// Executable name.
+const exe_name = "linuxwave";
+
+/// Version.
+const version = std.builtin.Version{ .major = 0, .minor = 1, .patch = 0 };
+
 pub fn build(b: *std.build.Builder) !void {
     // Standard target options allows the person running `zig build` to choose
     // what target to build for. Here we do not override the defaults, which
@@ -12,13 +18,20 @@ pub fn build(b: *std.build.Builder) !void {
     const mode = b.standardReleaseOptions();
 
     // Add main executable.
-    const exe = b.addExecutable("linuxwave", "src/main.zig");
+    const exe = b.addExecutable(exe_name, "src/main.zig");
     exe.setTarget(target);
     exe.setBuildMode(mode);
     exe.install();
 
     // Add libraries.
     exe.addPackagePath("clap", "libs/zig-clap/clap.zig");
+
+    // Add executable options.
+    const exe_options = b.addOptions();
+    exe.addOptions("build_options", exe_options);
+    const version_str = b.fmt("{d}.{d}.{d}", .{ version.major, version.minor, version.patch });
+    exe_options.addOption([]const u8, "version", version_str);
+    exe_options.addOption([]const u8, "exe_name", exe_name);
 
     // Create the run step and add arguments.
     const run_cmd = exe.run();

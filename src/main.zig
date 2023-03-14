@@ -3,6 +3,7 @@ const wav = @import("wav.zig");
 const gen = @import("gen.zig");
 const file = @import("file.zig");
 const clap = @import("clap");
+const build_options = @import("build_options");
 
 // Banner text.
 const banner = "【ｌｉｎｕｘｗａｖｅ】";
@@ -16,7 +17,8 @@ const frequency: f32 = 440;
 const volume: u8 = 50;
 // Parameters that the program can take.
 const params = clap.parseParamsComptime(
-    \\-h, --help Display this help and exit.
+    \\-V, --version Display version information.
+    \\-h, --help    Display this help and exit.
 );
 
 pub fn main() !void {
@@ -30,6 +32,9 @@ pub fn main() !void {
     if (cli.args.help) {
         try stderr.print("{s}\n", .{banner});
         return clap.help(stderr, clap.Help, &params, .{});
+    } else if (cli.args.version) {
+        try stderr.print("{s} {s}\n", .{ build_options.exe_name, build_options.version });
+        return;
     }
 
     // Read data from a file.
