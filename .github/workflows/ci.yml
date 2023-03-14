@@ -10,7 +10,7 @@ on:
 
 jobs:
   build:
-    name: Build/test on ${{ matrix.OS }} (${{ matrix.OPTIMIZE }})
+    name: "Build on ${{ matrix.OS }} (via args: ${{ matrix.OPTIMIZE }})"
     runs-on: ${{matrix.os}}
     strategy:
       fail-fast: false
@@ -32,8 +32,8 @@ jobs:
       - name: Build/test
         run: zig build ${{ matrix.STEP }} ${{ matrix.OPTIMIZE }}
 
-  lint:
-    name: Check lints
+  fmt:
+    name: Check formatting
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
@@ -48,6 +48,20 @@ jobs:
 
       - name: Check formatting
         run: zig fmt --check .
+
+  lint:
+    name: Check lints
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install Zig
+        uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: "0.11.0-dev.1570+693b12f8e"
 
       - name: Install Zigmod
         uses: nektro/actions-setup-zigmod@v1
