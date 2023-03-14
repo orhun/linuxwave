@@ -15,10 +15,11 @@ const default_output = "output.wav";
 const scale = [_]f32{ 0, 2, 3, 5, 7, 8, 10, 12 };
 // Frequency of A4. (<https://en.wikipedia.org/wiki/A440_(pitch_standard)>)
 const frequency: f32 = 440;
-// Volume control.
-const volume: u8 = 50;
+// Default volume control.
+const default_volume: u8 = 50;
 // Parameters that the program can take.
 const params = clap.parseParamsComptime(
+    \\-v, --volume  <VOL>     Sets the volume (0-100) [default: 50]
     \\-i, --input   <FILE>    Sets the input file [default: /dev/urandom]
     \\-o, --output  <FILE>    Sets the output file [default: output.wav]
     \\-V, --version           Display version information.
@@ -31,6 +32,7 @@ pub fn main() !void {
 
     // Parse command-line arguments.
     const parsers = comptime .{
+        .VOL = clap.parsers.int(u8, 0),
         .FILE = clap.parsers.string,
     };
     var diag = clap.Diagnostic{};
@@ -56,7 +58,8 @@ pub fn main() !void {
     std.debug.print("{d}\n", .{buffer});
 
     // Generate music.
-    const generator = gen.Generator(&scale, frequency, volume);
+    const volume = if (cli.args.volume) |volume| volume else default_volume;
+    const generator = gen.Generator.init(&scale, frequency, volume);
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const allocator = gpa.allocator();
     var data = std.ArrayList(u8).init(allocator);
