@@ -28,6 +28,11 @@ jobs:
         with:
           version: 0.10.0
 
+      - name: Show Zig version
+        run: |
+          zig version
+          zig env
+
       - name: Build
         run: zig build ${{ matrix.OPTIMIZE }}
 
