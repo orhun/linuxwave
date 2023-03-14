@@ -5,7 +5,7 @@ const std = @import("std");
 /// Generator implementation.
 pub const Generator = struct {
     /// Semitones from the base note in a major musical scale.
-    scale: []const f32,
+    scale: []const u8,
     /// Frequency of the note.
     ///
     /// <https://pages.mtu.edu/~suits/notefreqs.html>
@@ -14,7 +14,7 @@ pub const Generator = struct {
     volume: u8,
 
     /// Creates a new instance.
-    pub fn init(scale: []const f32, frequency: f32, volume: u8) Generator {
+    pub fn init(scale: []const u8, frequency: f32, volume: u8) Generator {
         return Generator{
             .scale = scale,
             .frequency = frequency,
@@ -33,7 +33,7 @@ pub const Generator = struct {
             // Hertz = 440 * 2^(semitone distance / 12)
             // (<http://en.wikipedia.org/wiki/Equal_temperament>)
             var amp = @sin(self.frequency * std.math.pi *
-                std.math.pow(f32, 2, self.scale[sample % self.scale.len] / 12) * i);
+                std.math.pow(f32, 2, @intToFloat(f32, self.scale[sample % self.scale.len]) / 12) * i);
             // Scale the amplitude between 0 and 256.
             amp = (amp * std.math.maxInt(u8) / 2) + (std.math.maxInt(u8) / 2);
             // Apply the volume control.
@@ -45,7 +45,7 @@ pub const Generator = struct {
 };
 
 test "generate music" {
-    const generator = Generator.init(&[_]f32{ 0, 1 }, 440, 100);
+    const generator = Generator.init(&[_]u8{ 0, 1 }, 440, 100);
     const allocator = std.testing.allocator;
 
     var data1 = try generator.generate(allocator, 'a');
