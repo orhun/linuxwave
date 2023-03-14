@@ -2,38 +2,50 @@
 
 const std = @import("std");
 
-/// Note generator implementation.
-pub fn Generator(
-    comptime scale: []const f32,
-    comptime frequency: f32,
-    comptime volume: u8,
-) type {
-    return struct {
-        /// Generates a sound from the given sample.
-        ///
-        /// Returns an array that contains the amplitudes of the sound wave at a given point in time.
-        pub fn generate(allocator: std.mem.Allocator, sample: u8) ![]const u8 {
-            var buffer = std.ArrayList(u8).init(allocator);
-            var i: f64 = 0;
-            while (i < 1) : (i += 0.0001) {
-                // Calculate the frequency according to the equal temperament.
-                // Hertz = 440 * 2^(semitone distance / 12)
-                // (<http://en.wikipedia.org/wiki/Equal_temperament>)
-                var amp = @sin(frequency * std.math.pi *
-                    std.math.pow(f32, 2, scale[sample % scale.len] / 12) * i);
-                // Scale the amplitude between 0 and 256.
-                amp = (amp * std.math.maxInt(u8) / 2) + (std.math.maxInt(u8) / 2);
-                // Apply the volume control.
-                amp = amp * @intToFloat(f64, volume) / 100;
-                try buffer.append(@floatToInt(u8, amp));
-            }
-            return buffer.toOwnedSlice();
+/// Generator implementation.
+pub const Generator = struct {
+    /// Semitones from the base note in a major musical scale.
+    scale: []const f32,
+    /// Frequency of the note.
+    ///
+    /// <https://pages.mtu.edu/~suits/notefreqs.html>
+    frequency: f32,
+    /// Volume control.
+    volume: u8,
+
+    /// Creates a new instance.
+    pub fn init(scale: []const f32, frequency: f32, volume: u8) Generator {
+        return Generator{
+            .scale = scale,
+            .frequency = frequency,
+            .volume = volume,
+        };
+    }
+
+    /// Generates a sound from the given sample.
+    ///
+    /// Returns an array that contains the amplitudes of the sound wave at a given point in time.
+    pub fn generate(self: Generator, allocator: std.mem.Allocator, sample: u8) ![]const u8 {
+        var buffer = std.ArrayList(u8).init(allocator);
+        var i: f64 = 0;
+        while (i < 1) : (i += 0.0001) {
+            // Calculate the frequency according to the equal temperament.
+            // Hertz = 440 * 2^(semitone distance / 12)
+            // (<http://en.wikipedia.org/wiki/Equal_temperament>)
+            var amp = @sin(self.frequency * std.math.pi *
+                std.math.pow(f32, 2, self.scale[sample % self.scale.len] / 12) * i);
+            // Scale the amplitude between 0 and 256.
+            amp = (amp * std.math.maxInt(u8) / 2) + (std.math.maxInt(u8) / 2);
+            // Apply the volume control.
+            amp = amp * @intToFloat(f64, self.volume) / 100;
+            try buffer.append(@floatToInt(u8, amp));
         }
-    };
-}
+        return buffer.toOwnedSlice();
+    }
+};
 
 test "generate music" {
-    const generator = Generator(&[_]f32{ 0, 1 }, 440, 100);
+    const generator = Generator.init(&[_]f32{ 0, 1 }, 440, 100);
     const allocator = std.testing.allocator;
 
     var data1 = try generator.generate(allocator, 'a');
