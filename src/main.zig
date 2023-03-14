@@ -14,16 +14,17 @@ const default_output = "output.wav";
 // Semitones from the base note in a major musical scale.
 const scale = [_]f32{ 0, 2, 3, 5, 7, 8, 10, 12 };
 // Frequency of A4. (<https://en.wikipedia.org/wiki/A440_(pitch_standard)>)
-const frequency: f32 = 440;
+const default_frequency: f32 = 440;
 // Default volume control.
 const default_volume: u8 = 50;
 // Parameters that the program can take.
 const params = clap.parseParamsComptime(
-    \\-v, --volume  <VOL>     Sets the volume (0-100) [default: 50]
-    \\-i, --input   <FILE>    Sets the input file [default: /dev/urandom]
-    \\-o, --output  <FILE>    Sets the output file [default: output.wav]
-    \\-V, --version           Display version information.
-    \\-h, --help              Display this help and exit.
+    \\-f, --frequency <HZ>      Sets the frequency [default: 440 (A4)]
+    \\-v, --volume    <VOL>     Sets the volume (0-100) [default: 50]
+    \\-i, --input     <FILE>    Sets the input file [default: /dev/urandom]
+    \\-o, --output    <FILE>    Sets the output file [default: output.wav]
+    \\-V, --version             Display version information.
+    \\-h, --help                Display this help and exit.
 );
 
 pub fn main() !void {
@@ -32,6 +33,7 @@ pub fn main() !void {
 
     // Parse command-line arguments.
     const parsers = comptime .{
+        .HZ = clap.parsers.float(f32),
         .VOL = clap.parsers.int(u8, 0),
         .FILE = clap.parsers.string,
     };
@@ -58,6 +60,7 @@ pub fn main() !void {
     std.debug.print("{d}\n", .{buffer});
 
     // Generate music.
+    const frequency = if (cli.args.frequency) |frequency| frequency else default_frequency;
     const volume = if (cli.args.volume) |volume| volume else default_volume;
     const generator = gen.Generator.init(&scale, frequency, volume);
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
