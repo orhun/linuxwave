@@ -4,7 +4,7 @@ const std = @import("std");
 
 /// Reads the given file and returns a byte array with the length of `len`.
 pub fn readBytes(path: []const u8, buffer: []u8) ![]u8 {
-    const file = try std.fs.openFileAbsolute(path, .{});
+    const file = try std.fs.cwd().openFile(path, .{});
     defer file.close();
     const bytes_read = try file.read(buffer);
     return buffer[0..bytes_read];
