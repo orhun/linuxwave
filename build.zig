@@ -17,7 +17,10 @@ pub fn build(b: *std.build.Builder) !void {
     exe.setBuildMode(mode);
     exe.install();
 
-    // Create the run step and add arguments
+    // Add libraries.
+    exe.addPackagePath("clap", "libs/zig-clap/clap.zig");
+
+    // Create the run step and add arguments.
     const run_cmd = exe.run();
     run_cmd.step.dependOn(b.getInstallStep());
     if (b.args) |args| {

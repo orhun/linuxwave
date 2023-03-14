@@ -2,9 +2,10 @@ const std = @import("std");
 const wav = @import("wav.zig");
 const gen = @import("gen.zig");
 const file = @import("file.zig");
+const clap = @import("clap");
 
 // Banner text.
-const text = "【ｌｉｎｕｘｗａｖｅ】";
+const banner = "【ｌｉｎｕｘｗａｖｅ】";
 // File to read.
 const source_file = "/dev/urandom";
 // Semitones from the base note in a major musical scale.
@@ -13,10 +14,23 @@ const scale = [_]f32{ 0, 2, 3, 5, 7, 8, 10, 12 };
 const frequency: f32 = 440;
 // Volume control.
 const volume: u8 = 50;
+// Parameters that the program can take.
+const params = clap.parseParamsComptime(
+    \\-h, --help Display this help and exit.
+);
 
 pub fn main() !void {
-    // Print banner text.
-    std.debug.print("{s}\n", .{text});
+    // Get stdout and stderr writers.
+    const stdout = std.io.getStdOut().writer();
+    const stderr = std.io.getStdErr().writer();
+
+    // Parse command-line arguments.
+    const cli = try clap.parse(clap.Help, &params, clap.parsers.default, .{});
+    defer cli.deinit();
+    if (cli.args.help) {
+        try stderr.print("{s}\n", .{banner});
+        return clap.help(stderr, clap.Help, &params, .{});
+    }
 
     // Read data from a file.
     var buf: [64]u8 = undefined;
@@ -35,7 +49,6 @@ pub fn main() !void {
     }
 
     // Encode WAV.
-    const stdout = std.io.getStdOut().writer();
     try wav.Encoder(@TypeOf(stdout)).encode(stdout, data.toOwnedSlice(), .{
         .num_channels = 1,
         .sample_rate = 24000,
