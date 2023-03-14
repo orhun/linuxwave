@@ -9,6 +9,8 @@ const build_options = @import("build_options");
 const banner = "【ｌｉｎｕｘｗａｖｅ】";
 // File to read.
 const source_file = "/dev/urandom";
+// Default output file.
+const default_output = "output.wav";
 // Semitones from the base note in a major musical scale.
 const scale = [_]f32{ 0, 2, 3, 5, 7, 8, 10, 12 };
 // Frequency of A4. (<https://en.wikipedia.org/wiki/A440_(pitch_standard)>)
@@ -17,17 +19,20 @@ const frequency: f32 = 440;
 const volume: u8 = 50;
 // Parameters that the program can take.
 const params = clap.parseParamsComptime(
-    \\-V, --version Display version information.
-    \\-h, --help    Display this help and exit.
+    \\-o, --output  <FILE>    Sets the output file.
+    \\-V, --version           Display version information.
+    \\-h, --help              Display this help and exit.
 );
 
 pub fn main() !void {
-    // Get stdout and stderr writers.
-    const stdout = std.io.getStdOut().writer();
+    // Get stderr writer.
     const stderr = std.io.getStdErr().writer();
 
     // Parse command-line arguments.
-    const cli = try clap.parse(clap.Help, &params, clap.parsers.default, .{});
+    const parsers = comptime .{
+        .FILE = clap.parsers.string,
+    };
+    const cli = try clap.parse(clap.Help, &params, parsers, .{});
     defer cli.deinit();
     if (cli.args.help) {
         try stderr.print("{s}\n", .{banner});
@@ -54,7 +59,16 @@ pub fn main() !void {
     }
 
     // Encode WAV.
-    try wav.Encoder(@TypeOf(stdout)).encode(stdout, data.toOwnedSlice(), .{
+    const output = if (cli.args.output) |output| output else default_output;
+    const writer = w: {
+        if (std.mem.eql(u8, output, "-")) {
+            break :w std.io.getStdOut().writer();
+        } else {
+            const out_file = try std.fs.cwd().createFile(output, .{});
+            break :w out_file.writer();
+        }
+    };
+    try wav.Encoder(@TypeOf(writer)).encode(writer, data.toOwnedSlice(), .{
         .num_channels = 1,
         .sample_rate = 24000,
         .format = .signed16_lsb,
