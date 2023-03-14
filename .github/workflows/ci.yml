@@ -1,0 +1,59 @@
+name: Continuous Integration
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 0 * * 0"
+
+jobs:
+  build:
+    name: Build/test on ${{ matrix.OS }} (${{ matrix.OPTIMIZE }})
+    runs-on: ${{matrix.os}}
+    strategy:
+      fail-fast: false
+      matrix:
+        OS: [ubuntu-latest]
+        STEP: ["", "test"]
+        OPTIMIZE: ["", "-Drelease-safe", "-Drelease-fast", "-Drelease-small"]
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install Zig
+        uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.10.0
+
+      - name: Build/test
+        run: zig build ${{ matrix.STEP }} ${{ matrix.OPTIMIZE }}
+
+  lint:
+    name: Check lints
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install Zig
+        uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.10.0
+
+      - name: Check formatting
+        run: zig fmt --check .
+
+      - name: Install Zigmod
+        uses: nektro/actions-setup-zigmod@v1
+
+      - name: Install Ziglint
+        run: zigmod aq install 1/nektro/ziglint
+
+      - name: Check lints
+        run: ~/.zigmod/bin/ziglint -skip todo
