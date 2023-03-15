@@ -15,17 +15,20 @@ const default_output = "output.wav";
 const default_scale = "0,2,3,5,7,8,10,12";
 // Frequency of A4. (<https://en.wikipedia.org/wiki/A440_(pitch_standard)>)
 const default_frequency: f32 = 440;
+// Default sample rate.
+const default_sample_rate: usize = 24000;
 // Default volume control.
 const default_volume: u8 = 50;
 // Parameters that the program can take.
 const params = clap.parseParamsComptime(
-    \\-s, --scale     <SCALE>   Sets the musical scale [default: 0,2,3,5,7,8,10,12]
-    \\-f, --frequency <HZ>      Sets the frequency [default: 440 (A4)]
-    \\-v, --volume    <VOL>     Sets the volume (0-100) [default: 50]
-    \\-i, --input     <FILE>    Sets the input file [default: /dev/urandom]
-    \\-o, --output    <FILE>    Sets the output file [default: output.wav]
-    \\-V, --version             Display version information.
-    \\-h, --help                Display this help and exit.
+    \\-s, --scale       <SCALE>   Sets the musical scale [default: 0,2,3,5,7,8,10,12]
+    \\-r, --sample-rate <HZ>      Sets the sample rate [default: 24000]
+    \\-f, --frequency   <HZ>      Sets the frequency [default: 440 (A4)]
+    \\-v, --volume      <VOL>     Sets the volume (0-100) [default: 50]
+    \\-i, --input       <FILE>    Sets the input file [default: /dev/urandom]
+    \\-o, --output      <FILE>    Sets the output file [default: output.wav]
+    \\-V, --version               Display version information.
+    \\-h, --help                  Display this help and exit.
 );
 
 pub fn main() !void {
@@ -91,7 +94,7 @@ pub fn main() !void {
     };
     try wav.Encoder(@TypeOf(writer)).encode(writer, data.toOwnedSlice(), .{
         .num_channels = 1,
-        .sample_rate = 24000,
+        .sample_rate = if (cli.args.@"sample-rate") |rate| @floatToInt(usize, rate) else default_sample_rate,
         .format = .signed16_lsb,
     });
 }
