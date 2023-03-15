@@ -22,7 +22,7 @@ const default_volume: u8 = 50;
 // Parameters that the program can take.
 const params = clap.parseParamsComptime(
     \\-s, --scale       <SCALE>   Sets the musical scale [default: 0,2,3,5,7,8,10,12]
-    \\-r, --sample-rate <HZ>      Sets the sample rate [default: 24000]
+    \\-r, --rate        <HZ>      Sets the sample rate [default: 24000]
     \\-f, --frequency   <HZ>      Sets the frequency [default: 440 (A4)]
     \\-v, --volume      <VOL>     Sets the volume (0-100) [default: 50]
     \\-i, --input       <FILE>    Sets the input file [default: /dev/urandom]
@@ -94,7 +94,7 @@ pub fn main() !void {
     };
     try wav.Encoder(@TypeOf(writer)).encode(writer, data.toOwnedSlice(), .{
         .num_channels = 1,
-        .sample_rate = if (cli.args.@"sample-rate") |rate| @floatToInt(usize, rate) else default_sample_rate,
+        .sample_rate = if (cli.args.rate) |rate| @floatToInt(usize, rate) else default_sample_rate,
         .format = .signed16_lsb,
     });
 }
