@@ -86,6 +86,7 @@ pub fn main() !void {
             break :w std.io.getStdOut().writer();
         } else {
             const out_file = try std.fs.cwd().createFile(output, .{});
+            try stderr.print("Saving to {s}\n", .{output});
             break :w out_file.writer();
         }
     };
