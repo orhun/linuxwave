@@ -59,7 +59,6 @@ pub fn main() !void {
     const input_file = if (cli.args.input) |input| input else default_input;
     var buf: [64]u8 = undefined;
     const buffer = try file.readBytes(input_file, &buf);
-    std.debug.print("{d}\n", .{buffer});
 
     // Generate music.
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
