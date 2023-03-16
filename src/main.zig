@@ -16,7 +16,7 @@ const default_scale = "0,2,3,5,7,8,10,12";
 // Default sample rate.
 const default_sample_rate: usize = 24000;
 // Frequency of A4. (<https://en.wikipedia.org/wiki/A440_(pitch_standard)>)
-const default_frequency: f32 = 440;
+const default_note: f32 = 440;
 // Default number of channels.
 const default_channels: usize = 1;
 // Default sample format.
@@ -27,7 +27,7 @@ const default_volume: u8 = 50;
 const params = clap.parseParamsComptime(
     \\-s, --scale       <SCALE>   Sets the musical scale [default: 0,2,3,5,7,8,10,12]
     \\-r, --rate        <HZ>      Sets the sample rate [default: 24000]
-    \\-n, --frequency   <HZ>      Sets the frequency of the note [default: 440 (A4)]
+    \\-n, --note        <HZ>      Sets the frequency of the note [default: 440 (A4)]
     \\-c, --channels    <NUM>     Sets the number of channels [default: 1]
     \\-f, --format      <FORMAT>  Sets the sample format [default: S16_LE]
     \\-v, --volume      <VOL>     Sets the volume (0-100) [default: 50]
@@ -79,9 +79,9 @@ pub fn main() !void {
     while (splits.next()) |chunk| {
         try scale.append(try std.fmt.parseInt(u8, chunk, 0));
     }
-    const frequency = if (cli.args.frequency) |frequency| frequency else default_frequency;
+    const note = if (cli.args.note) |note| note else default_note;
     const volume = if (cli.args.volume) |volume| volume else default_volume;
-    const generator = gen.Generator.init(scale.toOwnedSlice(), frequency, volume);
+    const generator = gen.Generator.init(scale.toOwnedSlice(), note, volume);
     var data = std.ArrayList(u8).init(allocator);
     for (buffer) |v| {
         var gen_data = try generator.generate(allocator, v);

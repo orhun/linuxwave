@@ -9,15 +9,15 @@ pub const Generator = struct {
     /// Frequency of the note.
     ///
     /// <https://pages.mtu.edu/~suits/notefreqs.html>
-    frequency: f32,
+    note: f32,
     /// Volume control.
     volume: u8,
 
     /// Creates a new instance.
-    pub fn init(scale: []const u8, frequency: f32, volume: u8) Generator {
+    pub fn init(scale: []const u8, note: f32, volume: u8) Generator {
         return Generator{
             .scale = scale,
-            .frequency = frequency,
+            .note = note,
             .volume = volume,
         };
     }
@@ -32,7 +32,7 @@ pub const Generator = struct {
             // Calculate the frequency according to the equal temperament.
             // Hertz = 440 * 2^(semitone distance / 12)
             // (<http://en.wikipedia.org/wiki/Equal_temperament>)
-            var amp = @sin(self.frequency * std.math.pi *
+            var amp = @sin(self.note * std.math.pi *
                 std.math.pow(f32, 2, @intToFloat(f32, self.scale[sample % self.scale.len]) / 12) * i);
             // Scale the amplitude between 0 and 256.
             amp = (amp * std.math.maxInt(u8) / 2) + (std.math.maxInt(u8) / 2);
