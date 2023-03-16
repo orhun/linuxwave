@@ -15,18 +15,22 @@ const DATA = [4]u8{ 'd', 'a', 't', 'a' };
 
 /// Format of the waveform data.
 pub const Format = enum {
-    unsigned8,
-    signed16_lsb,
-    signed24_lsb,
-    signed32_lsb,
+    /// Unsigned 8-bit.
+    U8,
+    /// Signed 16-bit little-endian.
+    S16_LE,
+    /// Signed 24-bit little-endian.
+    S24_LE,
+    /// Signed 32-bit little-endian.
+    S32_LE,
 
     /// Returns the bytes per sample.
     pub fn getNumBytes(self: Format) u16 {
         return switch (self) {
-            .unsigned8 => 1,
-            .signed16_lsb => 2,
-            .signed24_lsb => 3,
-            .signed32_lsb => 4,
+            .U8 => 1,
+            .S16_LE => 2,
+            .S24_LE => 3,
+            .S32_LE => 4,
         };
     }
 };
