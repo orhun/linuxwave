@@ -2,41 +2,18 @@ const std = @import("std");
 const wav = @import("wav.zig");
 const gen = @import("gen.zig");
 const file = @import("file.zig");
+const args = @import("args.zig");
 const defaults = @import("defaults.zig");
-const clap = @import("clap");
 const build_options = @import("build_options");
-
-// Banner text.
-const banner = "【ｌｉｎｕｘｗａｖｅ】";
-// Parameters that the program can take.
-const params = clap.parseParamsComptime(
-    \\-s, --scale       <SCALE>   Sets the musical scale [default: 0,2,3,5,7,8,10,12]
-    \\-r, --rate        <HZ>      Sets the sample rate [default: 24000]
-    \\-n, --note        <HZ>      Sets the frequency of the note [default: 440 (A4)]
-    \\-c, --channels    <NUM>     Sets the number of channels [default: 1]
-    \\-f, --format      <FORMAT>  Sets the sample format [default: S16_LE]
-    \\-v, --volume      <VOL>     Sets the volume (0-100) [default: 50]
-    \\-i, --input       <FILE>    Sets the input file [default: /dev/urandom]
-    \\-o, --output      <FILE>    Sets the output file [default: output.wav]
-    \\-V, --version               Display version information.
-    \\-h, --help                  Display this help and exit.
-);
+const clap = @import("clap");
 
 pub fn main() !void {
     // Get stderr writer.
     const stderr = std.io.getStdErr().writer();
 
     // Parse command-line arguments.
-    const parsers = comptime .{
-        .NUM = clap.parsers.int(usize, 0),
-        .SCALE = clap.parsers.string,
-        .HZ = clap.parsers.float(f32),
-        .VOL = clap.parsers.int(u8, 0),
-        .FILE = clap.parsers.string,
-        .FORMAT = clap.parsers.enumeration(wav.Format),
-    };
     var diag = clap.Diagnostic{};
-    const cli = clap.parse(clap.Help, &params, parsers, .{
+    const cli = clap.parse(clap.Help, &args.params, args.parsers, .{
         .diagnostic = &diag,
     }) catch |err| {
         diag.report(stderr, err) catch {};
@@ -44,8 +21,8 @@ pub fn main() !void {
     };
     defer cli.deinit();
     if (cli.args.help) {
-        try stderr.print("{s}\n", .{banner});
-        return clap.help(stderr, clap.Help, &params, .{});
+        try stderr.print("{s}\n", .{args.banner});
+        return clap.help(stderr, clap.Help, &args.params, .{});
     } else if (cli.args.version) {
         try stderr.print("{s} {s}\n", .{ build_options.exe_name, build_options.version });
         return;
