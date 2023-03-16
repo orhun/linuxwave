@@ -12,6 +12,8 @@ const WAVE = [4]u8{ 'W', 'A', 'V', 'E' };
 const FMT_ = [4]u8{ 'f', 'm', 't', ' ' };
 /// Chunk name for the digital audio sample data.
 const DATA = [4]u8{ 'd', 'a', 't', 'a' };
+// Total length of the header.
+const header_len: u32 = 44;
 
 /// Format of the waveform data.
 pub const Format = enum {
@@ -43,6 +45,11 @@ pub const EncoderConfig = struct {
     sample_rate: usize,
     /// Sample format.
     format: Format,
+
+    /// Returns the data length needed for given duration.
+    pub fn getDataLength(self: EncoderConfig, duration: usize) usize {
+        return duration * (self.sample_rate * self.num_channels * self.format.getNumBytes()) - header_len;
+    }
 };
 
 /// WAV encoder implementation.

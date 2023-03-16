@@ -16,3 +16,5 @@ pub const channels: usize = 1;
 pub const format = wav.Format.S16_LE;
 // Default volume control.
 pub const volume: u8 = 50;
+// Default duration.
+pub const duration: usize = 20;

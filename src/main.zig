@@ -21,29 +21,43 @@ pub fn main() !void {
     };
     defer cli.deinit();
     if (cli.args.help) {
-        try stderr.print("{s}\n", .{args.banner});
+        try stderr.print("{s}\n\n", .{args.banner});
         return clap.help(stderr, clap.Help, &args.params, .{});
     } else if (cli.args.version) {
         try stderr.print("{s} {s}\n", .{ build_options.exe_name, build_options.version });
         return;
     }
 
-    // Read data from a file.
-    const input_file = if (cli.args.input) |input| input else defaults.input;
-    var buf: [64]u8 = undefined;
-    const buffer = try file.readBytes(input_file, &buf);
-
-    // Generate music.
+    // Prepare configuration.
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const allocator = gpa.allocator();
-    var scale = std.ArrayList(u8).init(allocator);
-    var splits = std.mem.split(u8, if (cli.args.scale) |s| s else defaults.scale, ",");
-    while (splits.next()) |chunk| {
-        try scale.append(try std.fmt.parseInt(u8, chunk, 0));
-    }
-    const note = if (cli.args.note) |note| note else defaults.note;
-    const volume = if (cli.args.volume) |volume| volume else defaults.volume;
-    const generator = gen.Generator.init(scale.toOwnedSlice(), note, volume);
+    const encoder_config = wav.EncoderConfig{
+        .num_channels = if (cli.args.channels) |channels| channels else defaults.channels,
+        .sample_rate = if (cli.args.rate) |rate| @floatToInt(usize, rate) else defaults.sample_rate,
+        .format = if (cli.args.format) |format| format else defaults.format,
+    };
+    const generator_config = gen.GeneratorConfig{
+        .scale = s: {
+            var scale = std.ArrayList(u8).init(allocator);
+            var splits = std.mem.split(u8, if (cli.args.scale) |s| s else defaults.scale, ",");
+            while (splits.next()) |chunk| {
+                try scale.append(try std.fmt.parseInt(u8, chunk, 0));
+            }
+            break :s scale.toOwnedSlice();
+        },
+        .note = if (cli.args.note) |note| note else defaults.note,
+        .volume = if (cli.args.volume) |volume| volume else defaults.volume,
+    };
+    const duration = if (cli.args.duration) |duration| duration else defaults.duration;
+    const data_len = encoder_config.getDataLength(duration) / (gen.Generator.sample_count - 2);
+
+    // Read data from a file.
+    const input_file = if (cli.args.input) |input| input else defaults.input;
+    const buffer = try file.readBytes(allocator, input_file, data_len);
+    defer allocator.free(buffer);
+
+    // Generate music.
+    const generator = gen.Generator.init(generator_config);
     var data = std.ArrayList(u8).init(allocator);
     for (buffer) |v| {
         var gen_data = try generator.generate(allocator, v);
@@ -62,9 +76,5 @@ pub fn main() !void {
             break :w out_file.writer();
         }
     };
-    try wav.Encoder(@TypeOf(writer)).encode(writer, data.toOwnedSlice(), .{
-        .num_channels = if (cli.args.channels) |channels| channels else defaults.channels,
-        .sample_rate = if (cli.args.rate) |rate| @floatToInt(usize, rate) else defaults.sample_rate,
-        .format = if (cli.args.format) |format| format else defaults.format,
-    });
+    try wav.Encoder(@TypeOf(writer)).encode(writer, data.toOwnedSlice(), encoder_config);
 }

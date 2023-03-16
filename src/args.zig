@@ -12,6 +12,7 @@ pub const params = clap.parseParamsComptime(
     \\-c, --channels    <NUM>     Sets the number of channels [default: 1]
     \\-f, --format      <FORMAT>  Sets the sample format [default: S16_LE]
     \\-v, --volume      <VOL>     Sets the volume (0-100) [default: 50]
+    \\-d, --duration    <SECS>    Sets the duration [default: 20]
     \\-i, --input       <FILE>    Sets the input file [default: /dev/urandom]
     \\-o, --output      <FILE>    Sets the output file [default: output.wav]
     \\-V, --version               Display version information.
@@ -24,6 +25,7 @@ pub const parsers = .{
     .SCALE = clap.parsers.string,
     .HZ = clap.parsers.float(f32),
     .VOL = clap.parsers.int(u8, 0),
+    .SECS = clap.parsers.int(usize, 0),
     .FILE = clap.parsers.string,
     .FORMAT = clap.parsers.enumeration(wav.Format),
 };

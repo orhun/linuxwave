@@ -3,9 +3,15 @@
 const std = @import("std");
 
 /// Reads the given file and returns a byte array with the length of `len`.
-pub fn readBytes(path: []const u8, buffer: []u8) ![]u8 {
+pub fn readBytes(
+    allocator: std.mem.Allocator,
+    path: []const u8,
+    len: usize,
+) ![]u8 {
     const file = try std.fs.cwd().openFile(path, .{});
     defer file.close();
+    var list = try std.ArrayList(u8).initCapacity(allocator, len);
+    var buffer = list.allocatedSlice();
     const bytes_read = try file.read(buffer);
     return buffer[0..bytes_read];
 }
@@ -21,7 +27,7 @@ test "read bytes from the file" {
     defer allocator.free(path);
 
     // Read the contents of the file and compare.
-    var buffer: [9]u8 = undefined;
-    const bytes = try readBytes(path, &buffer);
+    const bytes = try readBytes(allocator, path, 9);
     try std.testing.expectEqualStrings("const std", bytes);
+    defer allocator.free(bytes);
 }
