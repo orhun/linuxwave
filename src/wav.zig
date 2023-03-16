@@ -127,7 +127,7 @@ test "encode WAV" {
     try Encoder(@TypeOf(writer)).encode(writer, &[_]u8{ 0, 0, 0, 0, 0, 0, 0, 0 }, .{
         .num_channels = 1,
         .sample_rate = 44100,
-        .format = .signed16_lsb,
+        .format = .S16_LE,
     });
     try std.testing.expectEqualSlices(u8, "RIFF", buffer[0..4]);
 }
@@ -139,7 +139,7 @@ test "stream out WAV" {
     try WavEncoder.writeHeader(fbs.writer(), .{
         .num_channels = 1,
         .sample_rate = 44100,
-        .format = .signed16_lsb,
+        .format = .S16_LE,
     });
     try std.testing.expectEqual(@as(u64, 44), try fbs.getPos());
     try std.testing.expectEqual(@as(u32, 0), std.mem.readIntLittle(u32, buffer[4..8]));
