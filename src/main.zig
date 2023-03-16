@@ -2,27 +2,12 @@ const std = @import("std");
 const wav = @import("wav.zig");
 const gen = @import("gen.zig");
 const file = @import("file.zig");
+const defaults = @import("defaults.zig");
 const clap = @import("clap");
 const build_options = @import("build_options");
 
 // Banner text.
 const banner = "【ｌｉｎｕｘｗａｖｅ】";
-// Default input file.
-const default_input = "/dev/urandom";
-// Default output file.
-const default_output = "output.wav";
-// Semitones from the base note in a major musical scale.
-const default_scale = "0,2,3,5,7,8,10,12";
-// Default sample rate.
-const default_sample_rate: usize = 24000;
-// Frequency of A4. (<https://en.wikipedia.org/wiki/A440_(pitch_standard)>)
-const default_note: f32 = 440;
-// Default number of channels.
-const default_channels: usize = 1;
-// Default sample format.
-const default_format = wav.Format.S16_LE;
-// Default volume control.
-const default_volume: u8 = 50;
 // Parameters that the program can take.
 const params = clap.parseParamsComptime(
     \\-s, --scale       <SCALE>   Sets the musical scale [default: 0,2,3,5,7,8,10,12]
@@ -67,7 +52,7 @@ pub fn main() !void {
     }
 
     // Read data from a file.
-    const input_file = if (cli.args.input) |input| input else default_input;
+    const input_file = if (cli.args.input) |input| input else defaults.input;
     var buf: [64]u8 = undefined;
     const buffer = try file.readBytes(input_file, &buf);
 
@@ -75,12 +60,12 @@ pub fn main() !void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const allocator = gpa.allocator();
     var scale = std.ArrayList(u8).init(allocator);
-    var splits = std.mem.split(u8, if (cli.args.scale) |s| s else default_scale, ",");
+    var splits = std.mem.split(u8, if (cli.args.scale) |s| s else defaults.scale, ",");
     while (splits.next()) |chunk| {
         try scale.append(try std.fmt.parseInt(u8, chunk, 0));
     }
-    const note = if (cli.args.note) |note| note else default_note;
-    const volume = if (cli.args.volume) |volume| volume else default_volume;
+    const note = if (cli.args.note) |note| note else defaults.note;
+    const volume = if (cli.args.volume) |volume| volume else defaults.volume;
     const generator = gen.Generator.init(scale.toOwnedSlice(), note, volume);
     var data = std.ArrayList(u8).init(allocator);
     for (buffer) |v| {
@@ -90,7 +75,7 @@ pub fn main() !void {
     }
 
     // Encode WAV.
-    const output = if (cli.args.output) |output| output else default_output;
+    const output = if (cli.args.output) |output| output else defaults.output;
     const writer = w: {
         if (std.mem.eql(u8, output, "-")) {
             break :w std.io.getStdOut().writer();
@@ -101,8 +86,8 @@ pub fn main() !void {
         }
     };
     try wav.Encoder(@TypeOf(writer)).encode(writer, data.toOwnedSlice(), .{
-        .num_channels = if (cli.args.channels) |channels| channels else default_channels,
-        .sample_rate = if (cli.args.rate) |rate| @floatToInt(usize, rate) else default_sample_rate,
-        .format = if (cli.args.format) |format| format else default_format,
+        .num_channels = if (cli.args.channels) |channels| channels else defaults.channels,
+        .sample_rate = if (cli.args.rate) |rate| @floatToInt(usize, rate) else defaults.sample_rate,
+        .format = if (cli.args.format) |format| format else defaults.format,
     });
 }
