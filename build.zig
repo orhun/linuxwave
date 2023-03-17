@@ -24,7 +24,8 @@ pub fn build(b: *std.build.Builder) !void {
     exe.install();
 
     // Add libraries.
-    exe.addPackagePath("clap", "libs/zig-clap/clap.zig");
+    const clap_pkg = "libs/zig-clap/clap.zig";
+    exe.addPackagePath("clap", clap_pkg);
 
     // Add executable options.
     const exe_options = b.addOptions();
@@ -48,12 +49,14 @@ pub fn build(b: *std.build.Builder) !void {
     const test_step = b.step("test", "Run tests");
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const allocator = gpa.allocator();
-    for ([_][]const u8{ "wav", "file", "gen" }) |module| {
+    for ([_][]const u8{ "main", "wav", "file", "gen" }) |module| {
         const test_module = try std.fmt.allocPrint(allocator, "src/{s}.zig", .{module});
         defer allocator.free(test_module);
         var exe_tests = b.addTest(test_module);
         exe_tests.setTarget(target);
         exe_tests.setBuildMode(mode);
+        exe_tests.addPackagePath("clap", clap_pkg);
+        exe_tests.addOptions("build_options", exe_options);
         test_step.dependOn(&exe_tests.step);
     }
 }
