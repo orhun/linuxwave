@@ -53,6 +53,14 @@ jobs:
         with:
           version: 0.10.0
 
+      - name: Install kcov
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            --no-install-recommends \
+            --allow-unauthenticated \
+            kcov
+
       - name: Test
         run: zig build test -Dtest-coverage
 
