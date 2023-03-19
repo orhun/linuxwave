@@ -17,6 +17,9 @@ pub fn build(b: *std.build.Builder) !void {
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall.
     const mode = b.standardReleaseOptions();
 
+    // Add custom options.
+    const coverage = b.option(bool, "test-coverage", "Generate test coverage") orelse false;
+
     // Add main executable.
     const exe = b.addExecutable(exe_name, "src/main.zig");
     exe.setTarget(target);
@@ -53,6 +56,13 @@ pub fn build(b: *std.build.Builder) !void {
         const test_module = try std.fmt.allocPrint(allocator, "src/{s}.zig", .{module});
         defer allocator.free(test_module);
         var exe_tests = b.addTest(test_module);
+        if (coverage) {
+            exe_tests.setExecCmd(&[_]?[]const u8{
+                "kcov",
+                "kcov-output",
+                null,
+            });
+        }
         exe_tests.setTarget(target);
         exe_tests.setBuildMode(mode);
         exe_tests.addPackagePath("clap", clap_pkg);

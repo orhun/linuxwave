@@ -39,6 +39,32 @@ jobs:
       - name: Test
         run: zig build test ${{ matrix.OPTIMIZE }}
 
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Install Zig
+        uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: 0.10.0
+
+      - name: Test
+        run: zig build test -Dtest-coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          name: code-coverage-report
+          directory: kcov-output
+          fail_ci_if_error: true
+          verbose: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+
   fmt:
     name: Check formatting
     runs-on: ubuntu-latest

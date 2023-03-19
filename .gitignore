@@ -14,3 +14,6 @@ docgen_tmp/
 
 # Default output file
 output.wav
+
+# Test coverage files
+kcov-output
