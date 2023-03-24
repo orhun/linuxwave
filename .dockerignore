@@ -1,0 +1,9 @@
+# Directories
+.github/
+kcov-output/
+zig-cache/
+zig-out/
+
+# Files
+.gitignore
+output.wav
