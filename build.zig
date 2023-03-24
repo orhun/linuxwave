@@ -18,12 +18,16 @@ pub fn build(b: *std.build.Builder) !void {
     const mode = b.standardReleaseOptions();
 
     // Add custom options.
+    const pie = b.option(bool, "pie", "Build a Position Independent Executable") orelse true;
+    const relro = b.option(bool, "relro", "Force all relocations to be read-only after processing") orelse true;
     const coverage = b.option(bool, "test-coverage", "Generate test coverage") orelse false;
 
     // Add main executable.
     const exe = b.addExecutable(exe_name, "src/main.zig");
     exe.setTarget(target);
     exe.setBuildMode(mode);
+    exe.pie = pie;
+    exe.link_z_relro = relro;
     exe.install();
 
     // Add libraries.
