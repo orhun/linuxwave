@@ -4,7 +4,7 @@ const std = @import("std");
 const exe_name = "linuxwave";
 
 /// Version.
-const version = std.builtin.Version{ .major = 0, .minor = 1, .patch = 0 };
+const version = "0.1.0"; // managed by release.sh
 
 pub fn build(b: *std.build.Builder) !void {
     // Standard target options allows the person running `zig build` to choose
@@ -37,8 +37,7 @@ pub fn build(b: *std.build.Builder) !void {
     // Add executable options.
     const exe_options = b.addOptions();
     exe.addOptions("build_options", exe_options);
-    const version_str = b.fmt("{d}.{d}.{d}", .{ version.major, version.minor, version.patch });
-    exe_options.addOption([]const u8, "version", version_str);
+    exe_options.addOption([]const u8, "version", version);
     exe_options.addOption([]const u8, "exe_name", exe_name);
 
     // Create the run step and add arguments.
