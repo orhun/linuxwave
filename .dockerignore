@@ -7,3 +7,6 @@ zig-out/
 # Files
 .gitignore
 output.wav
+cliff.toml
+release.sh
+*.md
