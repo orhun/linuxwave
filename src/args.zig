@@ -14,8 +14,8 @@ pub const banner =
 // Parameters that the program can take.
 pub const params = clap.parseParamsComptime(
     \\-s, --scale       <SCALE>   Sets the musical scale [default: 0,2,3,5,7,8,10,12]
-    \\-r, --rate        <HZ>      Sets the sample rate [default: 24000]
     \\-n, --note        <HZ>      Sets the frequency of the note [default: 440 (A4)]
+    \\-r, --rate        <HZ>      Sets the sample rate [default: 24000]
     \\-c, --channels    <NUM>     Sets the number of channels [default: 1]
     \\-f, --format      <FORMAT>  Sets the sample format [default: S16_LE]
     \\-v, --volume      <VOL>     Sets the volume (0-100) [default: 50]
