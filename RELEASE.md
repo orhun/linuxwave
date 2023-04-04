@@ -1,4 +1,4 @@
-# Creating a Release
+# Creating a Release 🐧🎵
 
 [GitHub](https://github.com/orhun/linuxwave/releases) releases are automated via [GitHub actions](.github/workflows/cd.yml) and triggered by pushing a tag.
 
