@@ -2,7 +2,11 @@ const wav = @import("wav.zig");
 const clap = @import("clap");
 
 // Banner text.
-pub const banner = "【ｌｉｎｕｘｗａｖｅ】";
+pub const banner =
+    \\【ｌｉｎｕｘｗａｖｅ】
+    \\
+    \\Options:
+;
 
 // Parameters that the program can take.
 pub const params = clap.parseParamsComptime(
@@ -18,6 +22,9 @@ pub const params = clap.parseParamsComptime(
     \\-V, --version               Display version information.
     \\-h, --help                  Display this help and exit.
 );
+
+// Style options for the help text.
+pub const help_options = clap.HelpOptions{ .spacing_between_parameters = 0, .indent = 2, .description_on_new_line = false };
 
 /// Argument parsers.
 pub const parsers = .{

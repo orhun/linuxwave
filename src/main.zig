@@ -13,8 +13,8 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
     const cli = try clap.parse(clap.Help, &args.params, args.parsers, .{});
     defer cli.deinit();
     if (cli.args.help) {
-        try output.print("{s}\n\n", .{args.banner});
-        return clap.help(output, clap.Help, &args.params, .{});
+        try output.print("{s}\n", .{args.banner});
+        return clap.help(output, clap.Help, &args.params, args.help_options);
     } else if (cli.args.version) {
         try output.print("{s} {s}\n", .{ build_options.exe_name, build_options.version });
         return;
