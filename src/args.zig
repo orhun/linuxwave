@@ -3,7 +3,10 @@ const clap = @import("clap");
 
 // Banner text.
 pub const banner =
-    \\【ｌｉｎｕｘｗａｖｅ】
+    \\
+    \\ ▜ ▘
+    \\ ▐ ▌▛▌▌▌▚▘▌▌▌▀▌▌▌█▌ — Generate music from the entropy of Linux 🐧🎵
+    \\ ▐▖▌▌▌▙▌▞▖▚▚▘█▌▚▘▙▖   https://github.com/orhun/linuxwave
     \\
     \\Options:
 ;
