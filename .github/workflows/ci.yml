@@ -15,8 +15,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        OS: [ubuntu-latest]
-        OPTIMIZE: ["", "-Drelease-safe", "-Drelease-fast", "-Drelease-small"]
+        OS: [ ubuntu-latest ]
+        OPTIMIZE:
+          [
+            "",
+            "-Drelease-safe",
+            "-Drelease-fast",
+            "-Drelease-small"
+          ]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3

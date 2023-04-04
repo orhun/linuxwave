@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        OS: [ubuntu-latest]
+        OS: [ ubuntu-latest ]
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
