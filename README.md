@@ -29,6 +29,7 @@ linuxwave -i /dev/random -o music.wav && mpv music.wav
   - [`input`](#input)
   - [`output`](#output)
 - [Examples](#examples)
+- [Presets](#presets)
 - [Funding](#funding)
 - [Contributing](#contributing)
 - [License](#license)
@@ -192,6 +193,44 @@ Sets the output file. It takes a filename as its argument.
 The default value is `output.wav`.
 
 ## Examples
+
+**Default**: Read random data from `/dev/urandom` to generate a 20-second music composition in the A4 scale and save it to `output.wav`:
+
+```sh
+linuxwave
+```
+
+To use the A minor blues scale:
+
+```sh
+linuxwave -s 0,3,5,6,7,10 -n 220 -o blues.wav
+```
+
+Read from an arbitrary file and turn it into a 10-second music composition in the C major scale:
+
+```sh
+linuxwave -i build.zig -n 261.63 -d 10 -o music.wav
+```
+
+## Presets
+
+Generate a **calming music** with a sample rate of 2000 Hz and a 32-bit little-endian signed integer format:
+
+```sh
+linuxwave -r 2000 -f S32_LE -o calm.wav
+```
+
+Generate a **chiptune music** with a sample rate of 44100 Hz, stereo (2-channel) output and 8-bit unsigned integer format:
+
+```sh
+linuxwave -r 44100 -f U8 -c 2 -o chiptune.wav
+```
+
+Generate a **boss stage music** with the volume of 65:
+
+```sh
+linuxwave -s 0,7,1 -n 60 -v 65 -o boss.wav
+```
 
 ## Funding
 
