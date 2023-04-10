@@ -47,6 +47,7 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
 
     // Read data from a file.
     const input_file = if (cli.args.input) |input| input else defaults.input;
+    try output.print("Reading from {s}\n", .{input_file});
     const buffer = try file.readBytes(allocator, input_file, data_len);
     defer allocator.free(buffer);
 
@@ -63,6 +64,7 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
     const out = if (cli.args.output) |out| out else defaults.output;
     const writer = w: {
         if (std.mem.eql(u8, out, "-")) {
+            try output.print("Writing to stdout\n", .{});
             break :w std.io.getStdOut().writer();
         } else {
             try output.print("Saving to {s}\n", .{out});
@@ -92,5 +94,9 @@ test "run" {
     try run(allocator, output);
     const result = buffer.toOwnedSlice();
     defer allocator.free(result);
-    try std.testing.expectEqualStrings("Saving to output.wav\n", result);
+    try std.testing.expectEqualStrings(
+        \\Reading from /dev/urandom
+        \\Saving to output.wav
+        \\
+    , result);
 }
