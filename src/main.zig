@@ -106,7 +106,7 @@ test "run" {
     const result = buffer.toOwnedSlice();
     defer allocator.free(result);
     try std.testing.expectEqualStrings(
-        \\Reading from /dev/urandom
+        \\Reading 96 bytes from /dev/urandom
         \\Saving to output.wav
         \\
     , result);
