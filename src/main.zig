@@ -45,10 +45,21 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
     const duration = if (cli.args.duration) |duration| duration else defaults.duration;
     const data_len = encoder_config.getDataLength(duration) / (gen.Generator.sample_count - 2);
 
-    // Read data from a file.
+    // Read data from a file or stdin.
     const input_file = if (cli.args.input) |input| input else defaults.input;
-    try output.print("Reading from {s}\n", .{input_file});
-    const buffer = try file.readBytes(allocator, input_file, data_len);
+    const buffer = b: {
+        if (std.mem.eql(u8, input_file, "-")) {
+            try output.print("Reading {d} bytes from stdin\n", .{data_len});
+            var list = try std.ArrayList(u8).initCapacity(allocator, data_len);
+            var buffer = list.allocatedSlice();
+            const stdin = std.io.getStdIn().reader();
+            try stdin.readNoEof(buffer);
+            break :b buffer;
+        } else {
+            try output.print("Reading {d} bytes from {s}\n", .{ data_len, input_file });
+            break :b try file.readBytes(allocator, input_file, data_len);
+        }
+    };
     defer allocator.free(buffer);
 
     // Generate music.
