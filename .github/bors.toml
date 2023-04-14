@@ -1,0 +1,12 @@
+status = [
+  "Build on ubuntu-latest (via args: )",
+  "Build on ubuntu-latest (via args: -Drelease-safe)",
+  "Build on ubuntu-latest (via args: -Drelease-fast)",
+  "Build on ubuntu-latest (via args: -Drelease-small)",
+  "Test",
+  "Check formatting",
+]
+delete_merged_branches = true
+update_base_for_deletes = true
+cut_body_after = "<details>"
+commit_title = "chore(pull): merge ${PR_REFS}"
