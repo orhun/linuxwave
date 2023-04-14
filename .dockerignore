@@ -1,5 +1,6 @@
 # Directories
 .github/
+assets/
 kcov-output/
 zig-cache/
 zig-out/

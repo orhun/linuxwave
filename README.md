@@ -1,8 +1,6 @@
-# `linuxwave`
+# `linuxwave` 🐧🎵
 
-```sh
-linuxwave -i /dev/random -o music.wav && mpv music.wav
-```
+![demo](assets/demo.gif)
 
 <details>
   <summary>Table of Contents</summary>
