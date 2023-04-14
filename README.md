@@ -2,6 +2,12 @@
 
 ![demo](assets/demo.gif)
 
+[![GitHub Release](https://img.shields.io/github/v/release/orhun/linuxwave?style=flat&labelColor=1d1d1d&color=424242&logo=GitHub&logoColor=white)](https://github.com/orhun/linuxwave/releases)
+[![Coverage](https://img.shields.io/codecov/c/gh/orhun/linuxwave?style=flat&labelColor=1d1d1d&color=424242&logo=Codecov&logoColor=white)](https://codecov.io/gh/orhun/linuxwave)
+[![Continuous Integration](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/ci.yml?branch=main&style=flat&labelColor=1d1d1d&color=424242&logo=GitHub%20Actions&logoColor=white)](https://github.com/orhun/linuxwave/actions?query=workflow%3A%22Continuous+Integration%22)
+[![Continuous Deployment](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/cd.yml?style=flat&labelColor=1d1d1d&color=424242&logo=GitHub%20Actions&logoColor=white&label=deploy)](https://github.com/orhun/linuxwave/actions?query=workflow%3A%22Continuous+Deployment%22)
+[![Docker Builds](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/docker.yml?style=flat&labelColor=1d1d1d&color=424242&label=docker&logo=Docker&logoColor=white)](https://hub.docker.com/r/orhunp/gpg-tui)
+
 <details>
   <summary>Table of Contents</summary>
 
@@ -250,9 +256,9 @@ The default value is `output.wav`.
 
 If you find `linuxwave` and/or other projects on my [GitHub profile](https://github.com/orhun) useful, consider supporting me on [GitHub Sponsors](https://github.com/sponsors/orhun) or [becoming a patron](https://www.patreon.com/join/orhunp)!
 
-[![Support me on GitHub Sponsors](https://img.shields.io/github/sponsors/orhun?style=flat&logo=GitHub&labelColor=000&color=ccc&logoColor=white)](https://github.com/sponsors/orhun)
-[![Support me on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dorhunp%26type%3Dpatrons&style=flat&logo=Patreon&labelColor=000&color=ccc&logoColor=white)](https://patreon.com/join/orhunp)
-[![Support me on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dorhunp%26type%3Dpledges&style=flat&logo=Patreon&labelColor=000&color=ccc&logoColor=white&label=)](https://patreon.com/join/orhunp)
+[![Support me on GitHub Sponsors](https://img.shields.io/github/sponsors/orhun?style=flat&logo=GitHub&labelColor=424242&color=1d1d1d&logoColor=white)](https://github.com/sponsors/orhun)
+[![Support me on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dorhunp%26type%3Dpatrons&style=flat&logo=Patreon&labelColor=424242&color=1d1d1d&logoColor=white)](https://patreon.com/join/orhunp)
+[![Support me on Patreon](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Fshieldsio-patreon.vercel.app%2Fapi%3Fusername%3Dorhunp%26type%3Dpledges&style=flat&logo=Patreon&labelColor=424242&color=1d1d1d&logoColor=white&label=)](https://patreon.com/join/orhunp)
 
 ## Contributing 🌱
 
