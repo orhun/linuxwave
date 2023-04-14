@@ -1,6 +1,6 @@
 # `linuxwave` 🐧🎵
 
-![demo](assets/demo.gif)
+![demo](https://github.com/orhun/linuxwave/blob/main/assets/demo.gif)
 
 [![GitHub Release](https://img.shields.io/github/v/release/orhun/linuxwave?style=flat&labelColor=1d1d1d&color=424242&logo=GitHub&logoColor=white)](https://github.com/orhun/linuxwave/releases)
 [![Coverage](https://img.shields.io/codecov/c/gh/orhun/linuxwave?style=flat&labelColor=1d1d1d&color=424242&logo=Codecov&logoColor=white)](https://codecov.io/gh/orhun/linuxwave)
