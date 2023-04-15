@@ -1,6 +1,6 @@
 # `linuxwave` 🐧🎵
 
-<center>
+<p align="center">
 
 ![demo](https://github.com/orhun/linuxwave/blob/main/assets/demo.gif)
 
@@ -11,7 +11,7 @@
 [![Docker Builds](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/docker.yml?style=flat&labelColor=1d1d1d&color=424242&label=docker&logo=Docker&logoColor=white)](https://hub.docker.com/r/orhunp/gpg-tui)
 [![Documentation](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/pages.yml?style=flat&labelColor=1d1d1d&color=424242&logo=Zig&logoColor=white&label=docs)](https://orhun.dev/linuxwave/docs/)
 
-</center>
+</p>
 
 <details>
   <summary>Table of Contents</summary>
