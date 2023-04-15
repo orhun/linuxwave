@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    name: "Build via args: '${{ matrix.OPTIMIZE }}'"
+    name: "Build with args: '${{ matrix.OPTIMIZE }}'"
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
