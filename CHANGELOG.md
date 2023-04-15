@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0-rc.4] - 2023-04-15
+
+### 🎵 Features
+
+- *(website)* Add a landing page
+
+### 🚜 Refactor
+
+- *(ci)* Remove unnecessary OS from build matrixes
+- *(lib)* Extract reusable modules as packages
+
+### 📚 Documentation
+
+- *(lib)* Support auto-generation of documentation with a build flag
+- *(readme)* Mention the API documentation
+- *(readme)* Add documentation build badge
+
+### 🎨 Styling
+
+- *(readme)* Use HTML for the badges
+- *(readme)* Fix centering the badges
+- *(readme)* Center the badges
+
+### ⚙️ Miscellaneous Tasks
+
+- *(ci)* Fix the grammar for the build job
+- *(pages)* Rename deploy step
+- *(pages)* Add workflow for deploying documentation
+
 ## [0.1.0-rc.3] - 2023-04-15
 
 ### 🐛 Bug Fixes
