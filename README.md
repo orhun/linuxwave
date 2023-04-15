@@ -2,14 +2,13 @@
 
 <p align="center">
 
-![demo](https://github.com/orhun/linuxwave/blob/main/assets/demo.gif)
-
-[![GitHub Release](https://img.shields.io/github/v/release/orhun/linuxwave?style=flat&labelColor=1d1d1d&color=424242&logo=GitHub&logoColor=white)](https://github.com/orhun/linuxwave/releases)
-[![Coverage](https://img.shields.io/codecov/c/gh/orhun/linuxwave?style=flat&labelColor=1d1d1d&color=424242&logo=Codecov&logoColor=white)](https://codecov.io/gh/orhun/linuxwave)
-[![Continuous Integration](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/ci.yml?branch=main&style=flat&labelColor=1d1d1d&color=424242&logo=GitHub%20Actions&logoColor=white)](https://github.com/orhun/linuxwave/actions?query=workflow%3A%22Continuous+Integration%22)
-[![Continuous Deployment](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/cd.yml?style=flat&labelColor=1d1d1d&color=424242&logo=GitHub%20Actions&logoColor=white&label=deploy)](https://github.com/orhun/linuxwave/actions?query=workflow%3A%22Continuous+Deployment%22)
-[![Docker Builds](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/docker.yml?style=flat&labelColor=1d1d1d&color=424242&label=docker&logo=Docker&logoColor=white)](https://hub.docker.com/r/orhunp/gpg-tui)
-[![Documentation](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/pages.yml?style=flat&labelColor=1d1d1d&color=424242&logo=Zig&logoColor=white&label=docs)](https://orhun.dev/linuxwave/docs/)
+<img src="https://github.com/orhun/linuxwave/blob/main/assets/demo.gif" alt="demo">
+<a href="https://github.com/orhun/linuxwave/releases"><img src="https://img.shields.io/github/v/release/orhun/linuxwave?style=flat&amp;labelColor=1d1d1d&amp;color=424242&amp;logo=GitHub&amp;logoColor=white" alt="GitHub Release"></a>
+<a href="https://codecov.io/gh/orhun/linuxwave"><img src="https://img.shields.io/codecov/c/gh/orhun/linuxwave?style=flat&amp;labelColor=1d1d1d&amp;color=424242&amp;logo=Codecov&amp;logoColor=white" alt="Coverage"></a>
+<a href="https://github.com/orhun/linuxwave/actions?query=workflow%3A%22Continuous+Integration%22"><img src="https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/ci.yml?branch=main&amp;style=flat&amp;labelColor=1d1d1d&amp;color=424242&amp;logo=GitHub%20Actions&amp;logoColor=white" alt="Continuous Integration"></a>
+<a href="https://github.com/orhun/linuxwave/actions?query=workflow%3A%22Continuous+Deployment%22"><img src="https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/cd.yml?style=flat&amp;labelColor=1d1d1d&amp;color=424242&amp;logo=GitHub%20Actions&amp;logoColor=white&amp;label=deploy" alt="Continuous Deployment"></a>
+<a href="https://hub.docker.com/r/orhunp/gpg-tui"><img src="https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/docker.yml?style=flat&amp;labelColor=1d1d1d&amp;color=424242&amp;label=docker&amp;logo=Docker&amp;logoColor=white" alt="Docker Builds"></a>
+<a href="https://orhun.dev/linuxwave/docs/"><img src="https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/pages.yml?style=flat&amp;labelColor=1d1d1d&amp;color=424242&amp;logo=Zig&amp;logoColor=white&amp;label=docs" alt="Documentation"></a>
 
 </p>
 
