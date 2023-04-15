@@ -1,8 +1,8 @@
 status = [
-  "Build on ubuntu-latest (via args: '')",
-  "Build on ubuntu-latest (via args: '-Drelease-safe')",
-  "Build on ubuntu-latest (via args: '-Drelease-fast')",
-  "Build on ubuntu-latest (via args: '-Drelease-small')",
+  "Build via args: ''",
+  "Build via args: '-Drelease-safe'",
+  "Build via args: '-Drelease-fast'",
+  "Build via args: '-Drelease-small'",
   "Test",
   "Check formatting",
 ]

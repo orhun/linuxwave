@@ -27,11 +27,10 @@ jobs:
   publish-github:
     name: Publish on GitHub
     needs: changelog
-    runs-on: ${{ matrix.OS }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        OS: [ ubuntu-latest ]
         TARGET:
           [
             x86_64-linux,

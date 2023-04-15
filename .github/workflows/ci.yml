@@ -12,12 +12,11 @@ on:
 
 jobs:
   build:
-    name: "Build on ${{ matrix.OS }} (via args: '${{ matrix.OPTIMIZE }}')"
-    runs-on: ${{matrix.os}}
+    name: "Build via args: '${{ matrix.OPTIMIZE }}'"
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        OS: [ ubuntu-latest ]
         OPTIMIZE:
           [
             "",
