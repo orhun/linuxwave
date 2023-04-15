@@ -6,7 +6,23 @@ const exe_name = "linuxwave";
 /// Version.
 const version = "0.1.0-rc.3"; // managed by release.sh
 
+/// Adds the required packages to the given executable.
+///
+/// This is used for providing the dependencies for main executable as well as the tests.
+fn addPackages(allocator: std.mem.Allocator, exe: *std.build.LibExeObjStep) !void {
+    exe.addPackagePath("clap", "libs/zig-clap/clap.zig");
+    for ([_][]const u8{ "file", "gen", "wav" }) |package| {
+        const path = try std.fmt.allocPrint(allocator, "src/{s}.zig", .{package});
+        defer allocator.free(path);
+        exe.addPackagePath(package, path);
+    }
+}
+
 pub fn build(b: *std.build.Builder) !void {
+    // Create an allocator.
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    const allocator = gpa.allocator();
+
     // Standard target options allows the person running `zig build` to choose
     // what target to build for. Here we do not override the defaults, which
     // means any target is allowed, and the default is native. Other options
@@ -30,9 +46,8 @@ pub fn build(b: *std.build.Builder) !void {
     exe.link_z_relro = relro;
     exe.install();
 
-    // Add libraries.
-    const clap_pkg = "libs/zig-clap/clap.zig";
-    exe.addPackagePath("clap", clap_pkg);
+    // Add packages.
+    try addPackages(allocator, exe);
 
     // Add executable options.
     const exe_options = b.addOptions();
@@ -53,8 +68,6 @@ pub fn build(b: *std.build.Builder) !void {
 
     // Add tests.
     const test_step = b.step("test", "Run tests");
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const allocator = gpa.allocator();
     for ([_][]const u8{ "main", "wav", "file", "gen" }) |module| {
         const test_module = try std.fmt.allocPrint(allocator, "src/{s}.zig", .{module});
         defer allocator.free(test_module);
@@ -68,7 +81,7 @@ pub fn build(b: *std.build.Builder) !void {
         }
         exe_tests.setTarget(target);
         exe_tests.setBuildMode(mode);
-        exe_tests.addPackagePath("clap", clap_pkg);
+        try addPackages(allocator, exe_tests);
         exe_tests.addOptions("build_options", exe_options);
         test_step.dependOn(&exe_tests.step);
     }
