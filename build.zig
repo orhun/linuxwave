@@ -4,7 +4,7 @@ const std = @import("std");
 const exe_name = "linuxwave";
 
 /// Version.
-const version = "0.1.0-rc.2"; // managed by release.sh
+const version = "0.1.0-rc.3"; // managed by release.sh
 
 pub fn build(b: *std.build.Builder) !void {
     // Standard target options allows the person running `zig build` to choose
