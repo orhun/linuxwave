@@ -27,11 +27,24 @@ jobs:
   publish-github:
     name: Publish on GitHub
     needs: changelog
-    runs-on: ${{ matrix.build.OS }}
+    runs-on: ${{ matrix.OS }}
     strategy:
       fail-fast: false
       matrix:
         OS: [ ubuntu-latest ]
+        TARGET:
+          [
+            x86_64-linux,
+            x86_64-macos,
+            x86_64-windows,
+            aarch64-linux,
+            aarch64-macos,
+            aarch64-windows,
+            arm-linux,
+            riscv64-linux,
+            i386-linux
+          ]
+
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -52,7 +65,7 @@ jobs:
           zig env
 
       - name: Build
-        run: zig build -Drelease-safe
+        run: zig build -Drelease-safe -Dtarget=${{ matrix.TARGET }}
 
       - name: Prepare release assets
         shell: bash
@@ -65,10 +78,10 @@ jobs:
       - name: Create release artifacts
         shell: bash
         run: |
-          tar -czvf linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.build.TARGET }}.tar.gz \
+          tar -czvf linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.tar.gz \
             linuxwave-${{ env.RELEASE_VERSION }}/
-          shasum -a 512 linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.build.TARGET }}.tar.gz \
-            > linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.build.TARGET }}.tar.gz.sha512
+          shasum -a 512 linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.tar.gz \
+            > linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.tar.gz.sha512
 
       - name: Sign the release
         shell: bash
@@ -78,12 +91,12 @@ jobs:
             --passphrase-fd 0 --import private.key
           echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --pinentry-mode=loopback \
             --passphrase-fd 0 --detach-sign \
-            linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.build.TARGET }}.tar.gz
+            linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.tar.gz
 
       - name: Upload the binary releases
         uses: svenstaro/upload-release-action@v2
         with:
-          file: linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.build.TARGET }}*
+          file: linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}*
           file_glob: true
           overwrite: true
           tag: ${{ github.ref }}
