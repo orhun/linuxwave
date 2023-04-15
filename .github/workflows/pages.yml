@@ -20,7 +20,7 @@ env:
 
 jobs:
   deploy:
-    name: Deploy documentation to GitHub Pages
+    name: Deploy documentation
     runs-on: ubuntu-latest
     environment:
       name: github-pages
