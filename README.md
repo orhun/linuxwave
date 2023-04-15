@@ -7,6 +7,7 @@
 [![Continuous Integration](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/ci.yml?branch=main&style=flat&labelColor=1d1d1d&color=424242&logo=GitHub%20Actions&logoColor=white)](https://github.com/orhun/linuxwave/actions?query=workflow%3A%22Continuous+Integration%22)
 [![Continuous Deployment](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/cd.yml?style=flat&labelColor=1d1d1d&color=424242&logo=GitHub%20Actions&logoColor=white&label=deploy)](https://github.com/orhun/linuxwave/actions?query=workflow%3A%22Continuous+Deployment%22)
 [![Docker Builds](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/docker.yml?style=flat&labelColor=1d1d1d&color=424242&label=docker&logo=Docker&logoColor=white)](https://hub.docker.com/r/orhunp/gpg-tui)
+[![Documentation](https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/pages.yml?style=flat&labelColor=1d1d1d&color=424242&logo=Zig&logoColor=white&label=docs)](https://orhun.dev/linuxwave/docs/)
 
 <details>
   <summary>Table of Contents</summary>
