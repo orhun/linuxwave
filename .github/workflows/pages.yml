@@ -6,6 +6,7 @@ on:
       - main
   workflow_dispatch:
 
+
 permissions:
   contents: read
   pages: write
@@ -20,7 +21,7 @@ env:
 
 jobs:
   deploy:
-    name: Deploy documentation
+    name: Deploy website
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -42,14 +43,18 @@ jobs:
           zig env
 
       - name: Build
-        run: zig build -Ddocs=true
+        run: |
+          zig build -Ddocs=true
+          mkdir website
+          cp assets/index.html website
+          cp -r docs website
 
       - name: Setup Pages
         uses: actions/configure-pages@v1
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
-          path: docs
+          path: website
 
       - name: Deploy to GitHub Pages
         id: deployment

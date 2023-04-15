@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://orhun.dev/linuxwave" />
+    <meta property="og:title" content="linuxwave" />
+    <meta
+      property="og:description"
+      content="Generate music from the entropy of Linux 🐧🎵"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script
+      async
+      defer
+      data-website-id="5ede5926-bbf9-45ed-8b38-4f7d343a8866"
+      src="https://umami.orhun.dev/umami.js"
+    ></script>
+    <title>🐧 linuxwave</title>
+    <style>
+      @keyframes intro {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      body,
+      html {
+        background-color: #171717;
+        font-family: Arial, sans-serif;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+      img {
+        max-width: 50%;
+        border: 1px solid white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px white;
+        animation: intro 1s both;
+        animation-delay: 0.15s;
+      }
+      .buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        animation: intro 2s both;
+        animation-delay: 0.15s;
+      }
+      .button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #171717;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        box-shadow: 0 0 3px rgba(255, 255, 255, 0.8);
+        transition: box-shadow 0.3s ease-in-out;
+      }
+      .button:hover {
+        box-shadow: 0 0 16px rgba(255, 255, 255, 0.8);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <img
+        src="https://raw.githubusercontent.com/orhun/linuxwave/main/assets/demo.gif"
+        alt="demo"
+      />
+      <div class="buttons">
+        <a href="https://github.com/orhun/linuxwave">
+          <button class="button">GitHub</button>
+        </a>
+        <a href="docs">
+          <button class="button">Zig Docs</button>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>
