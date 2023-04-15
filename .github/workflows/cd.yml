@@ -72,26 +72,37 @@ jobs:
         run: |
           mkdir -p release
           cp {LICENSE,README.md,CHANGELOG.md} release/
-          cp zig-out/bin/linuxwave release/
+          if [[ "${{ matrix.TARGET }}" = *"windows" ]]; then
+            cp zig-out/bin/linuxwave.exe release/
+          else
+            cp zig-out/bin/linuxwave release/
+          fi
           mv release/ linuxwave-${{ env.RELEASE_VERSION }}/
 
       - name: Create release artifacts
         shell: bash
         run: |
-          tar -czvf linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.tar.gz \
-            linuxwave-${{ env.RELEASE_VERSION }}/
-          shasum -a 512 linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.tar.gz \
-            > linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.tar.gz.sha512
+          if [[ "${{ matrix.TARGET }}" = *"windows" ]]; then
+            7z a -tzip linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.zip \
+              linuxwave-${{ env.RELEASE_VERSION }}/
+          else
+            tar -czvf linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.tar.gz \
+              linuxwave-${{ env.RELEASE_VERSION }}/
+            shasum -a 512 linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.tar.gz \
+              > linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.tar.gz.sha512
+          fi
 
       - name: Sign the release
         shell: bash
         run: |
-          echo "${{ secrets.GPG_RELEASE_KEY }}" | base64 --decode > private.key
-          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --pinentry-mode=loopback \
-            --passphrase-fd 0 --import private.key
-          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --pinentry-mode=loopback \
-            --passphrase-fd 0 --detach-sign \
-            linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.tar.gz
+          if [[ "${{ matrix.TARGET }}" != *"windows" ]]; then
+            echo "${{ secrets.GPG_RELEASE_KEY }}" | base64 --decode > private.key
+            echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --pinentry-mode=loopback \
+              --passphrase-fd 0 --import private.key
+            echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --pinentry-mode=loopback \
+              --passphrase-fd 0 --detach-sign \
+              linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}.tar.gz
+          fi
 
       - name: Upload the binary releases
         uses: svenstaro/upload-release-action@v2
