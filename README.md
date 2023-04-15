@@ -72,6 +72,8 @@ zig build -Drelease-safe
 
 Binary will be located at `zig-out/bin/linuxwave`. You can also run the binary directly via `zig build run`.
 
+If you want to use `linuxwave` in your Zig project as a package, the API documentation is available [here](https://orhun.dev/linuxwave/docs).
+
 ### Binary releases
 
 See the available binaries for different targets from the [releases page](https://github.com/orhun/linuxwave/releases). They are automated via [Continuous Deployment](.github/workflows/cd.yml) workflow.
