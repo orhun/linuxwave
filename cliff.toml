@@ -20,14 +20,14 @@ body = """
     | filter(attribute="scope")
     | sort(attribute="scope") %}
         - *({{commit.scope}})*{% if commit.breaking %} [**breaking**]{% endif %} \
-            {{ commit.message | upper_first }} by {{ commit.author.name }}
+            {{ commit.message | upper_first }}
     {%- endfor -%}
     {% raw %}\n{% endraw %}\
     {%- for commit in commits %}
         {%- if commit.scope -%}
         {% else -%}
             - *(uncategorized)*{% if commit.breaking %} [**breaking**]{% endif %} \
-                {{ commit.message | upper_first }} by {{ commit.author.name }}
+                {{ commit.message | upper_first }}
         {% endif -%}
     {% endfor -%}
 {% endfor %}\n
