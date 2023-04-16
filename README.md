@@ -17,6 +17,7 @@
 
 <!-- vim-markdown-toc GFM -->
 
+- [Motivation ✨](#motivation-)
 - [Installation 🤖](#installation-)
   - [Build from source](#build-from-source)
     - [Prerequisites](#prerequisites)
@@ -46,6 +47,11 @@
 <!-- vim-markdown-toc -->
 
 </details>
+
+## Motivation ✨
+
+- [Bash One Liner - Compose Music From Entropy in /dev/urandom](https://web.archive.org/web/20230122184930/https://blog.robertelder.org/bash-one-liner-compose-music/)
+  - ['Music' from /dev/urandom](https://news.ycombinator.com/item?id=11238247)
 
 ## Installation 🤖
 
