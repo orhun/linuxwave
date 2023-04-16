@@ -16,9 +16,6 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
-env:
-  NODE_OPTIONS: --max-old-space-size=6144
-
 jobs:
   deploy:
     name: Deploy website
