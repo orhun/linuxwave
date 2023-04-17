@@ -4,6 +4,7 @@ assets/
 kcov-output/
 zig-cache/
 zig-out/
+man/
 docs/
 
 # Files

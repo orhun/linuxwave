@@ -69,8 +69,9 @@ jobs:
       - name: Prepare release assets
         shell: bash
         run: |
-          mkdir -p release
+          mkdir -p release/man
           cp {LICENSE,README.md,CHANGELOG.md} release/
+          cp man/* release/man
           if [[ "${{ matrix.TARGET }}" = *"windows" ]]; then
             cp zig-out/bin/linuxwave.exe release/
           else

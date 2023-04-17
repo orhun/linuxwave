@@ -1,0 +1,52 @@
+.\" Manpage for linuxwave.
+.TH linuxwave "1" "April 2023" "linuxwave" "User Commands"
+.SH NAME
+linuxwave \- generate music from the entropy of Linux 
+.SH SYNOPSIS
+.B linuxwave
+[options]
+.SH DESCRIPTION
+linuxwave generates music compositions from the input data. The default input is /dev/urandom
+.SH OPTIONS
+.TP
+\fB\-s\fR, \fB\-\-scale\fR <SCALE>
+Sets the musical scale [default: 0,2,3,5,7,8,10,12]
+.TP
+\fB\-n\fR, \fB\-\-note\fR <HZ>
+Sets the frequency of the note [default: 440 (A4)]
+.TP
+\fB\-r\fR, \fB\-\-rate\fR <HZ>
+Sets the sample rate [default: 24000]
+.TP
+\fB\-c\fR, \fB\-\-channels\fR <NUM>
+Sets the number of channels [default: 1]
+.TP
+\fB\-f\fR, \fB\-\-format\fR <FORMAT>
+Sets the sample format [default: S16_LE]
+.TP
+\fB\-v\fR, \fB\-\-volume\fR <VOL>
+Sets the volume (0\-100) [default: 50]
+.TP
+\fB\-d\fR, \fB\-\-duration\fR <SECS>
+Sets the duration [default: 20]
+.TP
+\fB\-i\fR, \fB\-\-input\fR <FILE>
+Sets the input file [default: /dev/urandom]
+.TP
+\fB\-o\fR, \fB\-\-output\fR <FILE>
+Sets the output file [default: output.wav]
+.TP
+\fB\-V\fR, \fB\-\-version\fR
+Display version information.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Display this help and exit.
+.SH BUGS
+No known bugs.
+Use "Issues" page for reporting bugs: <https://github.com/orhun/linuxwave/issues/>
+.SH AUTHOR
+Written by Orhun Parmaksız <orhunparmaksiz@gmail.com>
+.SH COPYRIGHT
+Copyright © 2023 Orhun Parmaksız
+.P
+The MIT License
