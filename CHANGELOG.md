@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.2] - 2023-04-17
+
+### 🐛 Bug Fixes
+
+- *(docker)* Scan the correct docker image
+
+### 📚 Documentation
+
+- *(preset)* Add the "spooky_manor" preset
+
+### ⚙️ Miscellaneous Tasks
+
+- *(deps)* Bump actions/configure-pages from 1 to 3
+- *(deps)* Bump actions/deploy-pages from 1 to 2
+
 ## [0.1.1] - 2023-04-17
 
 ### 📚 Documentation
