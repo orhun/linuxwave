@@ -10,23 +10,10 @@ const version = "0.1.2"; // managed by release.sh
 ///
 /// This is used for providing the dependencies for main executable as well as the tests.
 fn addPackages(b: *std.Build, exe: *std.build.LibExeObjStep) !void {
-    // exe.addPackagePath("clap", "libs/zig-clap/clap.zig");
     exe.addModule("clap", b.createModule(.{
         .source_file = .{ .path = "libs/zig-clap/clap.zig" },
         .dependencies = &.{},
     }));
-    // comptime {
-    //     for ([_][]const u8{ "file", "gen", "wav" }) |package| {
-    //         // const path = try std.fmt.allocPrint(allocator, "src/{s}.zig", .{package});
-    //         // defer allocator.free(path);
-    //         const path = std.fmt.comptimePrint("src/{s}.zig", .{package});
-    //         // exe.addPackagePath(package, path);
-    //         exe.addModule(package, b.createModule(.{
-    //             .source_file = .{ .path = path },
-    //             .dependencies = &.{},
-    //         }));
-    //     }
-    // }
     exe.addModule("file", b.createModule(.{
         .source_file = .{ .path = "src/file.zig" },
         .dependencies = &.{},
@@ -70,8 +57,6 @@ pub fn build(b: *std.Build) !void {
         .target = target,
         .optimize = optimize,
     });
-    //exe.setTarget(target);
-    //exe.setBuildMode(mode);
     if (documentation) {
         exe.emit_docs = .emit;
     }
@@ -119,8 +104,6 @@ pub fn build(b: *std.Build) !void {
                 null,
             });
         }
-        //exe_tests.setTarget(target);
-        //exe_tests.setBuildMode(mode);
         try addPackages(b, exe_tests);
         exe_tests.addOptions("build_options", exe_options);
         test_step.dependOn(&exe_tests.step);
