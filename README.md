@@ -25,6 +25,7 @@
     - [Prerequisites](#prerequisites)
     - [Instructions](#instructions)
   - [Binary releases](#binary-releases)
+  - [Arch Linux](#arch-linux)
   - [Docker](#docker)
     - [Images](#images)
     - [Usage](#usage)
@@ -86,6 +87,14 @@ If you want to use `linuxwave` in your Zig project as a package, the API documen
 See the available binaries for different targets from the [releases page](https://github.com/orhun/linuxwave/releases). They are automated via [Continuous Deployment](.github/workflows/cd.yml) workflow.
 
 Release tarballs are signed with the following PGP key: [0xC0701E98290D90B8](https://keyserver.ubuntu.com/pks/lookup?search=0xC0701E98290D90B8&op=vindex)
+
+### Arch Linux
+
+`linuxwave` can be installed from the [community repository](https://archlinux.org/packages/community/x86_64/linuxwave/) using [pacman](https://wiki.archlinux.org/title/Pacman):
+
+```sh
+pacman -S linuxwave
+```
 
 ### Docker
 
