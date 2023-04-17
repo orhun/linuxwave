@@ -9,16 +9,39 @@ const version = "0.1.2"; // managed by release.sh
 /// Adds the required packages to the given executable.
 ///
 /// This is used for providing the dependencies for main executable as well as the tests.
-fn addPackages(allocator: std.mem.Allocator, exe: *std.build.LibExeObjStep) !void {
-    exe.addPackagePath("clap", "libs/zig-clap/clap.zig");
-    for ([_][]const u8{ "file", "gen", "wav" }) |package| {
-        const path = try std.fmt.allocPrint(allocator, "src/{s}.zig", .{package});
-        defer allocator.free(path);
-        exe.addPackagePath(package, path);
-    }
+fn addPackages(b: *std.Build, exe: *std.build.LibExeObjStep) !void {
+    // exe.addPackagePath("clap", "libs/zig-clap/clap.zig");
+    exe.addModule("clap", b.createModule(.{
+        .source_file = .{ .path = "libs/zig-clap/clap.zig" },
+        .dependencies = &.{},
+    }));
+    // comptime {
+    //     for ([_][]const u8{ "file", "gen", "wav" }) |package| {
+    //         // const path = try std.fmt.allocPrint(allocator, "src/{s}.zig", .{package});
+    //         // defer allocator.free(path);
+    //         const path = std.fmt.comptimePrint("src/{s}.zig", .{package});
+    //         // exe.addPackagePath(package, path);
+    //         exe.addModule(package, b.createModule(.{
+    //             .source_file = .{ .path = path },
+    //             .dependencies = &.{},
+    //         }));
+    //     }
+    // }
+    exe.addModule("file", b.createModule(.{
+        .source_file = .{ .path = "src/file.zig" },
+        .dependencies = &.{},
+    }));
+    exe.addModule("gen", b.createModule(.{
+        .source_file = .{ .path = "src/gen.zig" },
+        .dependencies = &.{},
+    }));
+    exe.addModule("wav", b.createModule(.{
+        .source_file = .{ .path = "src/wav.zig" },
+        .dependencies = &.{},
+    }));
 }
 
-pub fn build(b: *std.build.Builder) !void {
+pub fn build(b: *std.Build) !void {
     // Create an allocator.
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     const allocator = gpa.allocator();
@@ -31,7 +54,8 @@ pub fn build(b: *std.build.Builder) !void {
 
     // Standard release options allow the person running `zig build` to select
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall.
-    const mode = b.standardReleaseOptions();
+    //const mode = b.standardReleaseOptions();
+    const optimize = b.standardOptimizeOption(.{});
 
     // Add custom options.
     const pie = b.option(bool, "pie", "Build a Position Independent Executable") orelse true;
@@ -40,9 +64,14 @@ pub fn build(b: *std.build.Builder) !void {
     const documentation = b.option(bool, "docs", "Generate documentation") orelse false;
 
     // Add main executable.
-    const exe = b.addExecutable(exe_name, "src/main.zig");
-    exe.setTarget(target);
-    exe.setBuildMode(mode);
+    const exe = b.addExecutable(.{
+        .name = exe_name,
+        .root_source_file = .{ .path = "src/main.zig" },
+        .target = target,
+        .optimize = optimize,
+    });
+    //exe.setTarget(target);
+    //exe.setBuildMode(mode);
     if (documentation) {
         exe.emit_docs = .emit;
     }
@@ -51,7 +80,7 @@ pub fn build(b: *std.build.Builder) !void {
     exe.install();
 
     // Add packages.
-    try addPackages(allocator, exe);
+    try addPackages(b, exe);
 
     // Add executable options.
     const exe_options = b.addOptions();
@@ -73,9 +102,16 @@ pub fn build(b: *std.build.Builder) !void {
     // Add tests.
     const test_step = b.step("test", "Run tests");
     for ([_][]const u8{ "main", "wav", "file", "gen" }) |module| {
+        const test_name = try std.fmt.allocPrint(allocator, "{s}-tests", .{module});
+        defer allocator.free(test_name);
         const test_module = try std.fmt.allocPrint(allocator, "src/{s}.zig", .{module});
         defer allocator.free(test_module);
-        var exe_tests = b.addTest(test_module);
+        var exe_tests = b.addTest(.{
+            .name = test_name,
+            .root_source_file = .{ .path = test_module },
+            .target = target,
+            .optimize = optimize,
+        });
         if (coverage) {
             exe_tests.setExecCmd(&[_]?[]const u8{
                 "kcov",
@@ -83,9 +119,9 @@ pub fn build(b: *std.build.Builder) !void {
                 null,
             });
         }
-        exe_tests.setTarget(target);
-        exe_tests.setBuildMode(mode);
-        try addPackages(allocator, exe_tests);
+        //exe_tests.setTarget(target);
+        //exe_tests.setBuildMode(mode);
+        try addPackages(b, exe_tests);
         exe_tests.addOptions("build_options", exe_options);
         test_step.dependOn(&exe_tests.step);
     }

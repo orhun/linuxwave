@@ -34,7 +34,7 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
         while (splits.next()) |chunk| {
             try scale.append(try std.fmt.parseInt(u8, chunk, 0));
         }
-        break :s scale.toOwnedSlice();
+        break :s try scale.toOwnedSlice();
     };
     defer allocator.free(scale);
     const generator_config = gen.GeneratorConfig{
@@ -83,7 +83,7 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
             break :w out_file.writer();
         }
     };
-    const wav_data = data.toOwnedSlice();
+    const wav_data = try data.toOwnedSlice();
     defer allocator.free(wav_data);
     try wav.Encoder(@TypeOf(writer)).encode(writer, wav_data, encoder_config);
 }
