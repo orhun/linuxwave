@@ -72,7 +72,13 @@
 git clone https://github.com/orhun/linuxwave && cd linuxwave/
 ```
 
-2. Build.
+2. Update git submodules.
+
+```sh
+git submodule update --init --recursive
+```
+
+3. Build.
 
 ```sh
 zig build -Drelease-safe
