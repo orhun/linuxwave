@@ -86,7 +86,7 @@ jobs:
       - name: Scan the image
         uses: anchore/sbom-action@v0
         with:
-          image: ghcr.io/${{ github.repository_owner }}/systeroid
+          image: ghcr.io/${{ github.repository_owner }}/linuxwave
 
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
