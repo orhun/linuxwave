@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.0] - 2023-04-17
+
+### 🎵 Features
+
+- *(docs)* Add a man page
+
+### 🚜 Refactor
+
+- *(ci)* Remove unnecessary node options
+
+### 📚 Documentation
+
+- *(readme)* Add demo link
+- *(readme)* Add motivation section
+- *(website)* Add demo link to website
+
+### 🎨 Styling
+
+- *(readme)* Set the alignment to center for demo link
+- *(readme)* Center the demo text
+
 ## [0.1.0-rc.4] - 2023-04-15
 
 ### 🎵 Features

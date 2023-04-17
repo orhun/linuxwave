@@ -4,7 +4,7 @@ const std = @import("std");
 const exe_name = "linuxwave";
 
 /// Version.
-const version = "0.1.0-rc.4"; // managed by release.sh
+const version = "0.1.0"; // managed by release.sh
 
 /// Adds the required packages to the given executable.
 ///
