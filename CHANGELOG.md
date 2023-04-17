@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.1] - 2023-04-17
+
+### 📚 Documentation
+
+- *(readme)* Add submodule update step for building from source
+- *(readme)* Add installation instructions for Arch Linux
+
 ## [0.1.0] - 2023-04-17
 
 ### 🎵 Features
