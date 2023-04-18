@@ -103,7 +103,7 @@ test "run" {
     var buffer = std.ArrayList(u8).init(allocator);
     const output = buffer.writer();
     try run(allocator, output);
-    const result = buffer.toOwnedSlice();
+    const result = try buffer.toOwnedSlice();
     defer allocator.free(result);
     try std.testing.expectEqualStrings(
         \\Reading 96 bytes from /dev/urandom
