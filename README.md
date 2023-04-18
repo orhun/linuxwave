@@ -135,6 +135,12 @@ docker build -t linuxwave .
 linuxwave
 ```
 
+Or play it directly with [mpv](https://mpv.io/) without saving:
+
+```sh
+linuxwave -o - | mpv -
+```
+
 To use the A minor blues scale:
 
 ```sh
