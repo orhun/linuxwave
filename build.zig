@@ -41,7 +41,6 @@ pub fn build(b: *std.Build) !void {
 
     // Standard release options allow the person running `zig build` to select
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall.
-    //const mode = b.standardReleaseOptions();
     const optimize = b.standardOptimizeOption(.{});
 
     // Add custom options.
