@@ -12,10 +12,10 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
     // Parse command-line arguments.
     const cli = try clap.parse(clap.Help, &args.params, args.parsers, .{});
     defer cli.deinit();
-    if (cli.args.help) {
+    if (cli.args.help != 0) {
         try output.print("{s}\n", .{args.banner});
         return clap.help(output, clap.Help, &args.params, args.help_options);
-    } else if (cli.args.version) {
+    } else if (cli.args.version != 0) {
         try output.print("{s} {s}\n", .{ build_options.exe_name, build_options.version });
         return;
     }
