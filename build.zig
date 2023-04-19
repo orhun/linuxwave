@@ -69,8 +69,7 @@ pub fn build(b: *std.build.Builder) !void {
     // Add tests.
     const test_step = b.step("test", "Run tests");
     for ([_][]const u8{ "main", "wav", "file", "gen" }) |module| {
-        const test_module = try std.fmt.allocPrint(b.allocator, "src/{s}.zig", .{module});
-        defer b.allocator.free(test_module);
+        const test_module = b.fmt("src/{s}.zig", .{module});
         var exe_tests = b.addTest(test_module);
         if (coverage) {
             exe_tests.setExecCmd(&[_]?[]const u8{
