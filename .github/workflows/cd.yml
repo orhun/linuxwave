@@ -24,8 +24,8 @@ jobs:
           config: cliff.toml
           args: --latest --strip header
 
-  publish-github:
-    name: Publish on GitHub
+  publish-binaries:
+    name: Publish binaries
     needs: changelog
     runs-on: ubuntu-latest
     strategy:
@@ -108,6 +108,50 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           file: linuxwave-${{ env.RELEASE_VERSION }}-${{ matrix.TARGET }}*
+          file_glob: true
+          overwrite: true
+          tag: ${{ github.ref }}
+          release_name: "Release v${{ env.RELEASE_VERSION }}"
+          body: ${{ needs.changelog.outputs.release_body }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+
+  publish-source:
+    name: Publish the source code
+    needs: changelog
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - name: Set the release version
+        run: echo "RELEASE_VERSION=${GITHUB_REF:11}" >> $GITHUB_ENV
+
+      - name: Prepare source code
+        run: |
+          cd ..
+          zip -r v${{ env.RELEASE_VERSION }}.zip ${{ github.event.repository.name }}
+          tar -czvf v${{ env.RELEASE_VERSION }}.tar.gz ${{ github.event.repository.name }}
+          mv v${{ env.RELEASE_VERSION }}* ${{ github.event.repository.name }}
+
+      - name: Sign
+        shell: bash
+        run: |
+          echo "${{ secrets.GPG_RELEASE_KEY }}" | base64 --decode > private.key
+          echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --pinentry-mode=loopback \
+            --passphrase-fd 0 --import private.key
+          for ext in 'zip' 'tar.gz'; do
+            echo "${{ secrets.GPG_PASSPHRASE }}" | gpg --pinentry-mode=loopback \
+              --passphrase-fd 0 --detach-sign \
+              "v${{ env.RELEASE_VERSION }}.${ext}"
+          done
+
+      - name: Upload the source code
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: v${{ env.RELEASE_VERSION }}*
           file_glob: true
           overwrite: true
           tag: ${{ github.ref }}
