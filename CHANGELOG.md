@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.3] - 2023-04-19
+
+### 🎵 Features
+
+- *(cd)* Publish the signed source code which includes submodules
+
+### 📚 Documentation
+
+- *(readme)* Add stdout playback example
+
+### ⚙️ Miscellaneous Tasks
+
+- *(ci)* Use Zig 0.10.1 for CI/CD
+
 ## [0.1.2] - 2023-04-17
 
 ### 🐛 Bug Fixes
