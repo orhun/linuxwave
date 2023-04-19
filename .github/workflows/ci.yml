@@ -33,7 +33,7 @@ jobs:
       - name: Install Zig
         uses: goto-bus-stop/setup-zig@v2
         with:
-          version: 0.10.0
+          version: 0.10.1
 
       - name: Show Zig version
         run: |
@@ -58,7 +58,7 @@ jobs:
       - name: Install Zig
         uses: goto-bus-stop/setup-zig@v2
         with:
-          version: 0.10.0
+          version: 0.10.1
 
       - name: Install kcov
         run: |
@@ -92,7 +92,7 @@ jobs:
       - name: Install Zig
         uses: goto-bus-stop/setup-zig@v2
         with:
-          version: 0.10.0
+          version: 0.10.1
 
       - name: Check formatting
         run: zig fmt --check .
