@@ -116,7 +116,7 @@ Docker builds are [automated](./.github/workflows/docker.yml) and images are ava
 The following command can be used to generate `output.wav` in the current working directory:
 
 ```sh
-docker run --rm -it -v "$(pwd)":/app "orhunp/linuxwave:${TAG:-latest}"
+docker run --rm -v "$(pwd)":/app "orhunp/linuxwave:${TAG:-latest}"
 ```
 
 #### Building
