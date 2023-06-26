@@ -102,6 +102,14 @@ Release tarballs are signed with the following PGP key: [0xC0701E98290D90B8](htt
 pacman -S linuxwave
 ```
 
+### Void Linux
+
+`linuxwave` can be installed from official Void Linux package repository:
+
+```sh
+xbps-install linuxwave
+```
+
 ### Docker
 
 #### Images
