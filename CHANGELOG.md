@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.4] - 2023-06-29
+
+### 🚜 Refactor
+
+- *(build)* Use Builder's fmt function to avoid using allocator
+- *(build)* Use built-in allocator
+
+### 📚 Documentation
+
+- *(readme)* Add installation instruction for Void Linux
+- *(readme)* Simplify the Docker command
+
 ## [0.1.3] - 2023-04-19
 
 ### 🎵 Features
