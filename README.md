@@ -10,7 +10,10 @@
 <a href="https://hub.docker.com/r/orhunp/gpg-tui"><img src="https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/docker.yml?style=flat&amp;labelColor=1d1d1d&amp;color=424242&amp;label=docker&amp;logo=Docker&amp;logoColor=white" alt="Docker Builds"></a>
 <a href="https://orhun.dev/linuxwave/docs/"><img src="https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/pages.yml?style=flat&amp;labelColor=1d1d1d&amp;color=424242&amp;logo=Zig&amp;logoColor=white&amp;label=docs" alt="Documentation"></a>
 
-<p align="center"><a href="https://www.youtube.com/watch?v=SLiEuvDmo8M"><strong>Click here to watch the demo!</strong></a></p>
+<p align="center">
+<a href="https://www.youtube.com/watch?v=SLiEuvDmo8M"><strong>Click here to watch the demo!</strong></a><br>
+<a href="https://open.spotify.com/track/0ChxCDjs6wKnl8iu71K7yp">Listen to "linuxwave" on Spotify!</a>
+</p>
 
 </p>
 
