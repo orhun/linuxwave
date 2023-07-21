@@ -26,6 +26,7 @@
     - [Instructions](#instructions)
   - [Binary releases](#binary-releases)
   - [Arch Linux](#arch-linux)
+  - [Void Linux](#void-linux)
   - [Docker](#docker)
     - [Images](#images)
     - [Usage](#usage)
