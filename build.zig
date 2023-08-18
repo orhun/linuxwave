@@ -9,7 +9,7 @@ const version = "0.1.5"; // managed by release.sh
 /// Adds the required packages to the given executable.
 ///
 /// This is used for providing the dependencies for main executable as well as the tests.
-fn addPackages(b: *std.Build, exe: *std.build.LibExeObjStep) !void {
+fn addPackages(b: *std.Build, exe: *std.build.CompileStep) !void {
     exe.addModule("clap", b.createModule(.{
         .source_file = .{ .path = "libs/zig-clap/clap.zig" },
         .dependencies = &.{},
