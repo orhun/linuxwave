@@ -12,7 +12,7 @@ echo "Preparing $1..."
 # update the version
 msg="\/\/ managed by release.sh"
 sed -E -i "s/^(const version = ).* $msg$/\1\"${1#v}\"; $msg/" build.zig
-zig build test
+zig build --summary all test
 # update the changelog
 git cliff --tag "$1" >CHANGELOG.md
 git add -A

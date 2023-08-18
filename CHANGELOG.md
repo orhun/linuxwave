@@ -2,6 +2,43 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.1.5] - 2023-07-21
+
+### 📚 Documentation
+
+- *(readme)* Add Spotify link
+- *(readme)* Update table of contents
+
+### ⚙️ Miscellaneous Tasks
+
+- *(deps)* Bump actions/upload-pages-artifact from 1 to 2
+
+## [0.1.4] - 2023-06-29
+
+### 🚜 Refactor
+
+- *(build)* Use Builder's fmt function to avoid using allocator
+- *(build)* Use built-in allocator
+
+### 📚 Documentation
+
+- *(readme)* Add installation instruction for Void Linux
+- *(readme)* Simplify the Docker command
+
+## [0.1.3] - 2023-04-19
+
+### 🎵 Features
+
+- *(cd)* Publish the signed source code which includes submodules
+
+### 📚 Documentation
+
+- *(readme)* Add stdout playback example
+
+### ⚙️ Miscellaneous Tasks
+
+- *(ci)* Use Zig 0.10.1 for CI/CD
+
 ## [0.1.2] - 2023-04-17
 
 ### 🐛 Bug Fixes

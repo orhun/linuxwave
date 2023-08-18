@@ -10,7 +10,10 @@
 <a href="https://hub.docker.com/r/orhunp/gpg-tui"><img src="https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/docker.yml?style=flat&amp;labelColor=1d1d1d&amp;color=424242&amp;label=docker&amp;logo=Docker&amp;logoColor=white" alt="Docker Builds"></a>
 <a href="https://orhun.dev/linuxwave/docs/"><img src="https://img.shields.io/github/actions/workflow/status/orhun/linuxwave/pages.yml?style=flat&amp;labelColor=1d1d1d&amp;color=424242&amp;logo=Zig&amp;logoColor=white&amp;label=docs" alt="Documentation"></a>
 
-<p align="center"><a href="https://www.youtube.com/watch?v=SLiEuvDmo8M"><strong>Click here to watch the demo!</strong></a></p>
+<p align="center">
+<a href="https://www.youtube.com/watch?v=SLiEuvDmo8M"><strong>Click here to watch the demo!</strong></a><br>
+<a href="https://open.spotify.com/track/0ChxCDjs6wKnl8iu71K7yp">Listen to "linuxwave" on Spotify!</a>
+</p>
 
 </p>
 
@@ -26,6 +29,7 @@
     - [Instructions](#instructions)
   - [Binary releases](#binary-releases)
   - [Arch Linux](#arch-linux)
+  - [Void Linux](#void-linux)
   - [Docker](#docker)
     - [Images](#images)
     - [Usage](#usage)
@@ -102,6 +106,14 @@ Release tarballs are signed with the following PGP key: [0xC0701E98290D90B8](htt
 pacman -S linuxwave
 ```
 
+### Void Linux
+
+`linuxwave` can be installed from official Void Linux package repository:
+
+```sh
+xbps-install linuxwave
+```
+
 ### Docker
 
 #### Images
@@ -116,7 +128,7 @@ Docker builds are [automated](./.github/workflows/docker.yml) and images are ava
 The following command can be used to generate `output.wav` in the current working directory:
 
 ```sh
-docker run --rm -it -v "$(pwd)":/app "orhunp/linuxwave:${TAG:-latest}"
+docker run --rm -v "$(pwd)":/app "orhunp/linuxwave:${TAG:-latest}"
 ```
 
 #### Building
@@ -133,6 +145,12 @@ docker build -t linuxwave .
 
 ```sh
 linuxwave
+```
+
+Or play it directly with [mpv](https://mpv.io/) without saving:
+
+```sh
+linuxwave -o - | mpv -
 ```
 
 To use the A minor blues scale:

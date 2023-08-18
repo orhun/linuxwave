@@ -23,7 +23,7 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
     // Create encoder configuration.
     const encoder_config = wav.EncoderConfig{
         .num_channels = if (cli.args.channels) |channels| channels else defaults.channels,
-        .sample_rate = if (cli.args.rate) |rate| @floatToInt(usize, rate) else defaults.sample_rate,
+        .sample_rate = if (cli.args.rate) |rate| @as(usize, @intFromFloat(rate)) else defaults.sample_rate,
         .format = if (cli.args.format) |format| format else defaults.format,
     };
 

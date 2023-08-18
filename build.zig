@@ -4,7 +4,7 @@ const std = @import("std");
 const exe_name = "linuxwave";
 
 /// Version.
-const version = "0.1.2"; // managed by release.sh
+const version = "0.1.5"; // managed by release.sh
 
 /// Adds the required packages to the given executable.
 ///
@@ -29,10 +29,6 @@ fn addPackages(b: *std.Build, exe: *std.build.LibExeObjStep) !void {
 }
 
 pub fn build(b: *std.Build) !void {
-    // Create an allocator.
-    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
-    const allocator = gpa.allocator();
-
     // Standard target options allows the person running `zig build` to choose
     // what target to build for. Here we do not override the defaults, which
     // means any target is allowed, and the default is native. Other options
@@ -57,11 +53,16 @@ pub fn build(b: *std.Build) !void {
         .optimize = optimize,
     });
     if (documentation) {
-        exe.emit_docs = .emit;
+        const install_docs = b.addInstallDirectory(.{
+            .source_dir = exe.getEmittedDocs(),
+            .install_dir = .prefix,
+            .install_subdir = "docs",
+        });
+        b.getInstallStep().dependOn(&install_docs.step);
     }
     exe.pie = pie;
     exe.link_z_relro = relro;
-    exe.install();
+    b.installArtifact(exe);
 
     // Add packages.
     try addPackages(b, exe);
@@ -73,7 +74,7 @@ pub fn build(b: *std.Build) !void {
     exe_options.addOption([]const u8, "exe_name", exe_name);
 
     // Create the run step and add arguments.
-    const run_cmd = exe.run();
+    const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
     if (b.args) |args| {
         run_cmd.addArgs(args);
@@ -85,11 +86,10 @@ pub fn build(b: *std.Build) !void {
 
     // Add tests.
     const test_step = b.step("test", "Run tests");
+
     for ([_][]const u8{ "main", "wav", "file", "gen" }) |module| {
-        const test_name = try std.fmt.allocPrint(allocator, "{s}-tests", .{module});
-        defer allocator.free(test_name);
-        const test_module = try std.fmt.allocPrint(allocator, "src/{s}.zig", .{module});
-        defer allocator.free(test_module);
+        const test_name = b.fmt("{s}-tests", .{module});
+        const test_module = b.fmt("src/{s}.zig", .{module});
         var exe_tests = b.addTest(.{
             .name = test_name,
             .root_source_file = .{ .path = test_module },
@@ -105,6 +105,7 @@ pub fn build(b: *std.Build) !void {
         }
         try addPackages(b, exe_tests);
         exe_tests.addOptions("build_options", exe_options);
-        test_step.dependOn(&exe_tests.step);
+        const run_unit_tests = b.addRunArtifact(exe_tests);
+        test_step.dependOn(&run_unit_tests.step);
     }
 }

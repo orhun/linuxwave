@@ -38,13 +38,13 @@ pub const Generator = struct {
             // Hertz = 440 * 2^(semitone distance / 12)
             // (<http://en.wikipedia.org/wiki/Equal_temperament>)
             var amp = @sin(self.config.note * std.math.pi *
-                std.math.pow(f32, 2, @intToFloat(f32, self.config.scale[sample % self.config.scale.len]) / 12) *
-                (@intToFloat(f64, i) * 0.0001));
+                std.math.pow(f32, 2, @as(f32, @floatFromInt(self.config.scale[sample % self.config.scale.len])) / 12) *
+                (@as(f64, @floatFromInt(i)) * 0.0001));
             // Scale the amplitude between 0 and 256.
             amp = (amp * std.math.maxInt(u8) / 2) + (std.math.maxInt(u8) / 2);
             // Apply the volume control.
-            amp = amp * @intToFloat(f64, self.config.volume) / 100;
-            try buffer.append(@floatToInt(u8, amp));
+            amp = amp * @as(f64, @floatFromInt(self.config.volume)) / 100;
+            try buffer.append(@as(u8, @intFromFloat(amp)));
         }
         return buffer.toOwnedSlice();
     }

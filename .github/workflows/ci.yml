@@ -69,7 +69,7 @@ jobs:
             kcov
 
       - name: Test
-        run: zig build test -Dtest-coverage
+        run: zig build --summary all test -Dtest-coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
