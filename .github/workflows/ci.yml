@@ -20,9 +20,9 @@ jobs:
         OPTIMIZE:
           [
             "",
-            "-Drelease-safe",
-            "-Drelease-fast",
-            "-Drelease-small"
+            "-Doptimize=ReleaseSafe",
+            "-Doptimize=ReleaseFast",
+            "-Doptimize=ReleaseSmall",
           ]
     steps:
       - name: Checkout the repository

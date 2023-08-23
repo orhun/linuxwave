@@ -1,8 +1,8 @@
 status = [
   "Build with args: ''",
-  "Build with args: '-Drelease-safe'",
-  "Build with args: '-Drelease-fast'",
-  "Build with args: '-Drelease-small'",
+  "Build with args: '-Doptimize=ReleaseSafe'",
+  "Build with args: '-Doptimize=ReleaseFast'",
+  "Build with args: '-Doptimize=ReleaseSmall'",
   "Test",
   "Check formatting",
 ]

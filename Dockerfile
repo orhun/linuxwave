@@ -4,7 +4,7 @@ RUN apk add --no-cache git
 WORKDIR /app
 COPY . .
 RUN git submodule update --init --recursive && \
-  zig build -Drelease-safe
+  zig build -Doptimize=ReleaseSafe
 
 FROM alpine:3.8
 WORKDIR /app
