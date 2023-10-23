@@ -75,7 +75,7 @@ zig build run
 6. Add your tests or update the existing tests according to the changes and check if the tests are passed.
 
 ```sh
-zig build test
+zig build --summary all test
 ```
 
 8. Push changes to your fork.

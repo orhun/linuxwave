@@ -90,12 +90,12 @@ pub fn Encoder(comptime Writer: type) type {
         fn writeChunks(writer: Writer, config: EncoderConfig, opt_data: ?[]const u8) !void {
             // Chunk configuration.
             const bytes_per_sample = config.format.getNumBytes();
-            const num_channels = @intCast(u16, config.num_channels);
-            const sample_rate = @intCast(u32, config.sample_rate);
+            const num_channels = @as(u16, @intCast(config.num_channels));
+            const sample_rate = @as(u32, @intCast(config.sample_rate));
             const byte_rate = sample_rate * @as(u32, num_channels) * bytes_per_sample;
             const block_align: u16 = num_channels * bytes_per_sample;
             const bits_per_sample: u16 = bytes_per_sample * 8;
-            const data_len = if (opt_data) |data| @intCast(u32, data.len) else 0;
+            const data_len = if (opt_data) |data| @as(u32, @intCast(data.len)) else 0;
             // Write the file header.
             try writer.writeAll(&RIFF);
             if (opt_data != null) {

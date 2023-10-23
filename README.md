@@ -66,7 +66,7 @@
 
 #### Prerequisites
 
-- [Zig](https://ziglang.org/download/) (`0.10.1`)
+- [Zig](https://ziglang.org/download/) (`0.11.0`)
 
 #### Instructions
 
@@ -85,7 +85,7 @@ git submodule update --init --recursive
 3. Build.
 
 ```sh
-zig build -Drelease-safe
+zig build -Doptimize=ReleaseSafe
 ```
 
 Binary will be located at `zig-out/bin/linuxwave`. You can also run the binary directly via `zig build run`.

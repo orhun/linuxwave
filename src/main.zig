@@ -12,10 +12,10 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
     // Parse command-line arguments.
     const cli = try clap.parse(clap.Help, &args.params, args.parsers, .{});
     defer cli.deinit();
-    if (cli.args.help) {
+    if (cli.args.help != 0) {
         try output.print("{s}\n", .{args.banner});
         return clap.help(output, clap.Help, &args.params, args.help_options);
-    } else if (cli.args.version) {
+    } else if (cli.args.version != 0) {
         try output.print("{s} {s}\n", .{ build_options.exe_name, build_options.version });
         return;
     }
@@ -23,7 +23,7 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
     // Create encoder configuration.
     const encoder_config = wav.EncoderConfig{
         .num_channels = if (cli.args.channels) |channels| channels else defaults.channels,
-        .sample_rate = if (cli.args.rate) |rate| @floatToInt(usize, rate) else defaults.sample_rate,
+        .sample_rate = if (cli.args.rate) |rate| @as(usize, @intFromFloat(rate)) else defaults.sample_rate,
         .format = if (cli.args.format) |format| format else defaults.format,
     };
 
@@ -34,7 +34,7 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
         while (splits.next()) |chunk| {
             try scale.append(try std.fmt.parseInt(u8, chunk, 0));
         }
-        break :s scale.toOwnedSlice();
+        break :s try scale.toOwnedSlice();
     };
     defer allocator.free(scale);
     const generator_config = gen.GeneratorConfig{
@@ -83,7 +83,7 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
             break :w out_file.writer();
         }
     };
-    const wav_data = data.toOwnedSlice();
+    const wav_data = try data.toOwnedSlice();
     defer allocator.free(wav_data);
     try wav.Encoder(@TypeOf(writer)).encode(writer, wav_data, encoder_config);
 }
@@ -103,7 +103,7 @@ test "run" {
     var buffer = std.ArrayList(u8).init(allocator);
     const output = buffer.writer();
     try run(allocator, output);
-    const result = buffer.toOwnedSlice();
+    const result = try buffer.toOwnedSlice();
     defer allocator.free(result);
     try std.testing.expectEqualStrings(
         \\Reading 96 bytes from /dev/urandom

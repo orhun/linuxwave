@@ -1,10 +1,10 @@
-FROM euantorano/zig:0.10.1 as builder
+FROM euantorano/zig:0.11.0 as builder
 RUN apk update
 RUN apk add --no-cache git
 WORKDIR /app
 COPY . .
 RUN git submodule update --init --recursive && \
-  zig build -Drelease-safe
+  zig build -Doptimize=ReleaseSafe
 
 FROM alpine:3.8
 WORKDIR /app

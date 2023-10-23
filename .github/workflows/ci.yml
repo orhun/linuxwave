@@ -20,9 +20,9 @@ jobs:
         OPTIMIZE:
           [
             "",
-            "-Drelease-safe",
-            "-Drelease-fast",
-            "-Drelease-small"
+            "-Doptimize=ReleaseSafe",
+            "-Doptimize=ReleaseFast",
+            "-Doptimize=ReleaseSmall",
           ]
     steps:
       - name: Checkout the repository
@@ -33,7 +33,7 @@ jobs:
       - name: Install Zig
         uses: goto-bus-stop/setup-zig@v2
         with:
-          version: 0.10.1
+          version: 0.11.0
 
       - name: Show Zig version
         run: |
@@ -58,7 +58,7 @@ jobs:
       - name: Install Zig
         uses: goto-bus-stop/setup-zig@v2
         with:
-          version: 0.10.1
+          version: 0.11.0
 
       - name: Install kcov
         run: |
@@ -69,7 +69,7 @@ jobs:
             kcov
 
       - name: Test
-        run: zig build test -Dtest-coverage
+        run: zig build --summary all test -Dtest-coverage
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v4
@@ -92,7 +92,7 @@ jobs:
       - name: Install Zig
         uses: goto-bus-stop/setup-zig@v2
         with:
-          version: 0.10.1
+          version: 0.11.0
 
       - name: Check formatting
         run: zig fmt --check .
