@@ -37,14 +37,15 @@ pub const Generator = struct {
             // Calculate the frequency according to the equal temperament.
             // Hertz = 440 * 2^(semitone distance / 12)
             // (<http://en.wikipedia.org/wiki/Equal_temperament>)
-            var amp = @sin(self.config.note * std.math.pi *
-                std.math.pow(f32, 2, @intToFloat(f32, self.config.scale[sample % self.config.scale.len]) / 12) *
-                (@intToFloat(f64, i) * 0.0001));
+            const tone_distance: f32 = @floatFromInt(self.config.scale[sample % self.config.scale.len]);
+            const increment: f32 = @floatFromInt(i);
+            var amp = @sin(self.config.note * std.math.pi * std.math.pow(f32, 2, tone_distance / 12) * (increment * 0.0001));
             // Scale the amplitude between 0 and 256.
             amp = (amp * std.math.maxInt(u8) / 2) + (std.math.maxInt(u8) / 2);
             // Apply the volume control.
-            amp = amp * @intToFloat(f64, self.config.volume) / 100;
-            try buffer.append(@floatToInt(u8, amp));
+            const volume: f32 = @floatFromInt(self.config.volume);
+            amp = amp * volume / 100;
+            try buffer.append(@intFromFloat(amp));
         }
         return buffer.toOwnedSlice();
     }
