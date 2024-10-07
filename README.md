@@ -66,7 +66,7 @@
 
 #### Prerequisites
 
-- [Zig](https://ziglang.org/download/) (`0.10.1`)
+- [Zig](https://ziglang.org/download/) (`0.12` or `0.13`)
 
 #### Instructions
 
@@ -76,16 +76,10 @@
 git clone https://github.com/orhun/linuxwave && cd linuxwave/
 ```
 
-2. Update git submodules.
+2. Build.
 
 ```sh
-git submodule update --init --recursive
-```
-
-3. Build.
-
-```sh
-zig build -Drelease-safe
+zig build --release=safe
 ```
 
 Binary will be located at `zig-out/bin/linuxwave`. You can also run the binary directly via `zig build run`.

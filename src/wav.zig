@@ -72,10 +72,11 @@ pub fn Encoder(comptime Writer: type) type {
 
         /// Patches the headers to seek back and patch the headers for length values.
         pub fn patchHeader(writer: Writer, seeker: anytype, data_len: u32) !void {
+            const endian = std.builtin.Endian.little;
             try seeker.seekTo(4);
-            try writer.writeIntLittle(u32, data_chunk_pos + 8 + data_len - 8);
+            try writer.writeInt(u32, data_chunk_pos + 8 + data_len - 8, endian);
             try seeker.seekTo(data_chunk_pos + 4);
-            try writer.writeIntLittle(u32, data_len);
+            try writer.writeInt(u32, data_len, endian);
         }
 
         /// Writes the WAV chunks with optional data.
@@ -90,38 +91,39 @@ pub fn Encoder(comptime Writer: type) type {
         fn writeChunks(writer: Writer, config: EncoderConfig, opt_data: ?[]const u8) !void {
             // Chunk configuration.
             const bytes_per_sample = config.format.getNumBytes();
-            const num_channels = @intCast(u16, config.num_channels);
-            const sample_rate = @intCast(u32, config.sample_rate);
+            const num_channels: u16 = @intCast(config.num_channels);
+            const sample_rate: u32 = @intCast(config.sample_rate);
             const byte_rate = sample_rate * @as(u32, num_channels) * bytes_per_sample;
             const block_align: u16 = num_channels * bytes_per_sample;
             const bits_per_sample: u16 = bytes_per_sample * 8;
-            const data_len = if (opt_data) |data| @intCast(u32, data.len) else 0;
+            const data_len: u32 = if (opt_data) |data| @intCast(data.len) else 0;
+            const endian = std.builtin.Endian.little;
             // Write the file header.
             try writer.writeAll(&RIFF);
             if (opt_data != null) {
-                try writer.writeIntLittle(u32, data_chunk_pos + 8 + data_len - 8);
+                try writer.writeInt(u32, data_chunk_pos + 8 + data_len - 8, endian);
             } else {
-                try writer.writeIntLittle(u32, 0);
+                try writer.writeInt(u32, 0, endian);
             }
             try writer.writeAll(&WAVE);
             // Write the format chunk.
             try writer.writeAll(&FMT_);
             // Encode with pulse-code modulation (LPCM).
-            try writer.writeIntLittle(u32, 16);
+            try writer.writeInt(u32, 16, endian);
             // Uncompressed.
-            try writer.writeIntLittle(u16, 1);
-            try writer.writeIntLittle(u16, num_channels);
-            try writer.writeIntLittle(u32, sample_rate);
-            try writer.writeIntLittle(u32, byte_rate);
-            try writer.writeIntLittle(u16, block_align);
-            try writer.writeIntLittle(u16, bits_per_sample);
+            try writer.writeInt(u16, 1, endian);
+            try writer.writeInt(u16, num_channels, endian);
+            try writer.writeInt(u32, sample_rate, endian);
+            try writer.writeInt(u32, byte_rate, endian);
+            try writer.writeInt(u16, block_align, endian);
+            try writer.writeInt(u16, bits_per_sample, endian);
             // Write the data chunk.
             try writer.writeAll(&DATA);
             if (opt_data) |data| {
-                try writer.writeIntLittle(u32, data_len);
+                try writer.writeInt(u32, data_len, endian);
                 try writer.writeAll(data);
             } else {
-                try writer.writeIntLittle(u32, 0);
+                try writer.writeInt(u32, 0, endian);
             }
         }
     };
@@ -130,7 +132,7 @@ pub fn Encoder(comptime Writer: type) type {
 test "encode WAV" {
     var buffer: [1000]u8 = undefined;
     var stream = std.io.fixedBufferStream(&buffer);
-    var writer = stream.writer();
+    const writer = stream.writer();
     try Encoder(@TypeOf(writer)).encode(writer, &[_]u8{ 0, 0, 0, 0, 0, 0, 0, 0 }, .{
         .num_channels = 1,
         .sample_rate = 44100,
@@ -142,6 +144,7 @@ test "encode WAV" {
 test "stream out WAV" {
     var buffer: [1000]u8 = undefined;
     var fbs = std.io.fixedBufferStream(&buffer);
+    const endian = std.builtin.Endian.little;
     const WavEncoder = Encoder(@TypeOf(fbs).Writer);
     try WavEncoder.writeHeader(fbs.writer(), .{
         .num_channels = 1,
@@ -149,13 +152,13 @@ test "stream out WAV" {
         .format = .S16_LE,
     });
     try std.testing.expectEqual(@as(u64, 44), try fbs.getPos());
-    try std.testing.expectEqual(@as(u32, 0), std.mem.readIntLittle(u32, buffer[4..8]));
-    try std.testing.expectEqual(@as(u32, 0), std.mem.readIntLittle(u32, buffer[40..44]));
+    try std.testing.expectEqual(@as(u32, 0), std.mem.readInt(u32, buffer[4..8], endian));
+    try std.testing.expectEqual(@as(u32, 0), std.mem.readInt(u32, buffer[40..44], endian));
 
     const data = &[_]u8{ 0, 0, 0, 0, 0, 0, 0, 0 };
     try fbs.writer().writeAll(data);
     try std.testing.expectEqual(@as(u64, 52), try fbs.getPos());
     try WavEncoder.patchHeader(fbs.writer(), fbs.seekableStream(), data.len);
-    try std.testing.expectEqual(@as(u32, 44), std.mem.readIntLittle(u32, buffer[4..8]));
-    try std.testing.expectEqual(@as(u32, 8), std.mem.readIntLittle(u32, buffer[40..44]));
+    try std.testing.expectEqual(@as(u32, 44), std.mem.readInt(u32, buffer[4..8], endian));
+    try std.testing.expectEqual(@as(u32, 8), std.mem.readInt(u32, buffer[40..44], endian));
 }
