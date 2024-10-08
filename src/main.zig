@@ -97,3 +97,23 @@ pub fn main() !void {
         try stderr.print("Error occurred: {}\n", .{err});
     };
 }
+
+test "run" {
+    const allocator = std.testing.allocator;
+    var buffer = std.ArrayList(u8).init(allocator);
+    const output = buffer.writer();
+    run(allocator, output) catch |err| {
+        std.debug.print("Error occurred: {s}\n", .{@errorName(err)});
+        return;
+    };
+    const result = buffer.toOwnedSlice() catch |err| {
+        std.debug.print("Error occurred: {s}\n", .{@errorName(err)});
+        return;
+    };
+    defer allocator.free(result);
+    try std.testing.expectEqualStrings(
+        \\Reading 96 bytes from /dev/urandom
+        \\Saving to output.wav
+        \\
+    , result);
+}
