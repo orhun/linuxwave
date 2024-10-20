@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.2.0] - 2024-10-20
+
+### 🎵 Features
+
+- *(uncategorized)* [**breaking**] Rewrite for Zig 0.12/0.13 ([#28](https://github.com/orhun/linuxwave/issues/28))
+
+### 🐛 Bug Fixes
+
+- *(test)* Add back `main` test ([#30](https://github.com/orhun/linuxwave/issues/30))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(website)* Update tracking link
+
 ## [0.1.5] - 2023-07-21
 
 ### 📚 Documentation
