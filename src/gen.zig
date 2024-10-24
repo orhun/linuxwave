@@ -33,6 +33,7 @@ pub const Generator = struct {
     pub fn generate(self: Generator, allocator: std.mem.Allocator, sample: u8) ![]u8 {
         var buffer = std.ArrayList(u8).init(allocator);
         var i: usize = 0;
+        const N: f32 = @floatFromInt(sample_count);
         while (i < sample_count) : (i += 1) {
             // Calculate the frequency according to the equal temperament.
             // Hertz = 440 * 2^(semitone distance / 12)
@@ -45,6 +46,12 @@ pub const Generator = struct {
             // Apply the volume control.
             const volume: f32 = @floatFromInt(self.config.volume);
             amp = amp * volume / 100;
+
+            // Apply the Hann window function.
+            const index: f32 = @floatFromInt(i);
+            const hann_window = 0.5 * (1.0 - std.math.cos(2.0 * std.math.pi * index / (N - 1)));
+            amp = amp * hann_window;
+
             try buffer.append(@intFromFloat(amp));
         }
         return buffer.toOwnedSlice();
