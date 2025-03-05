@@ -18,7 +18,7 @@ pub fn readBytes(
 
 test "read bytes from the file" {
     // Get the current directory.
-    var cwd_buffer: [std.fs.MAX_PATH_BYTES]u8 = undefined;
+    var cwd_buffer: [std.fs.max_path_bytes]u8 = undefined;
     const cwd = try std.posix.getcwd(&cwd_buffer);
 
     // Concatenate the current directory with the builder file.

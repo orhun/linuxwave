@@ -30,7 +30,7 @@ fn run(allocator: std.mem.Allocator, output: anytype) !void {
     // Create generator configuration.
     const scale = s: {
         var scale = std.ArrayList(u8).init(allocator);
-        var splits = std.mem.split(u8, if (cli.args.scale) |s| s else defaults.scale, ",");
+        var splits = std.mem.splitAny(u8, if (cli.args.scale) |s| s else defaults.scale, ",");
         while (splits.next()) |chunk| {
             try scale.append(try std.fmt.parseInt(u8, chunk, 0));
         }
