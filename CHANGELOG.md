@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2025-03-07
+
+### 🎵 Features
+
+- *(uncategorized)* Zig 0.14 ([#40](https://github.com/orhun/linuxwave/issues/40))
+
+### 📚 Documentation
+
+- *(license)* Update license copyright years
+
 ## [0.2.0] - 2024-10-20
 
 ### 🎵 Features
@@ -22,10 +32,6 @@ All notable changes to this project will be documented in this file.
 
 - *(readme)* Add Spotify link
 - *(readme)* Update table of contents
-
-### ⚙️ Miscellaneous Tasks
-
-- *(deps)* Bump actions/upload-pages-artifact from 1 to 2
 
 ## [0.1.4] - 2023-06-29
 
@@ -62,11 +68,6 @@ All notable changes to this project will be documented in this file.
 ### 📚 Documentation
 
 - *(preset)* Add the "spooky_manor" preset
-
-### ⚙️ Miscellaneous Tasks
-
-- *(deps)* Bump actions/configure-pages from 1 to 3
-- *(deps)* Bump actions/deploy-pages from 1 to 2
 
 ## [0.1.1] - 2023-04-17
 
