@@ -1,4 +1,4 @@
-FROM euantorano/zig:0.10.1 as builder
+FROM eloitor/zig:0.14.0 as builder
 RUN apk update
 RUN apk add --no-cache git
 WORKDIR /app

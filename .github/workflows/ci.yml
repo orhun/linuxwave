@@ -29,9 +29,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Zig
-        uses: goto-bus-stop/setup-zig@v2
+        uses: mlugg/setup-zig@v1
         with:
-          version: 0.12.1
+          version: 0.14.0
 
       - name: Show Zig version
         run: |
@@ -46,15 +46,15 @@ jobs:
 
   test:
     name: Test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
 
       - name: Install Zig
-        uses: goto-bus-stop/setup-zig@v2
+        uses: mlugg/setup-zig@v1
         with:
-          version: 0.12.1
+          version: 0.14.0
 
       - name: Install kcov
         run: |
@@ -84,9 +84,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Zig
-        uses: goto-bus-stop/setup-zig@v2
+        uses: mlugg/setup-zig@v1
         with:
-          version: 0.12.1
+          version: 0.14.0
 
       - name: Check formatting
         run: zig fmt --check .

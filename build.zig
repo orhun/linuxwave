@@ -10,7 +10,7 @@ const version = "0.2.0"; // managed by release.sh
 ///
 /// This is used for providing the dependencies for main executable as well as the tests.
 fn addPackages(b: *std.Build, exe: *std.Build.Step.Compile) !void {
-    const clap = b.dependency("zig-clap", .{}).module("clap");
+    const clap = b.dependency("clap", .{}).module("clap");
     exe.root_module.addImport("clap", clap);
     for ([_][]const u8{ "file", "gen", "wav" }) |package| {
         const path = b.fmt("src/{s}.zig", .{package});
