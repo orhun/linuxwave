@@ -6,18 +6,12 @@ const exe_name = "linuxwave";
 /// Version.
 const version = "0.3.0"; // managed by release.sh
 
-/// Adds the required packages to the given executable.
+/// Adds the required packages to the given module.
 ///
 /// This is used for providing the dependencies for main executable as well as the tests.
-fn addPackages(b: *std.Build, exe: *std.Build.Step.Compile) !void {
+fn addPackages(b: *std.Build, mod: *std.Build.Module) !void {
     const clap = b.dependency("clap", .{}).module("clap");
-    exe.root_module.addImport("clap", clap);
-    for ([_][]const u8{ "file", "gen", "wav" }) |package| {
-        const path = b.fmt("src/{s}.zig", .{package});
-        exe.root_module.addImport(package, b.createModule(.{
-            .root_source_file = b.path(path),
-        }));
-    }
+    mod.addImport("clap", clap);
 }
 
 pub fn build(b: *std.Build) void {
@@ -31,18 +25,25 @@ pub fn build(b: *std.Build) void {
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall.
     const optimize = b.standardOptimizeOption(.{});
 
+    const root = b.createModule(.{
+        .root_source_file = b.path("src/main.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
     // Add custom options.
     const pie = b.option(bool, "pie", "Build a Position Independent Executable") orelse true;
     const relro = b.option(bool, "relro", "Force all relocations to be read-only after processing") orelse true;
     const coverage = b.option(bool, "test-coverage", "Generate test coverage") orelse false;
     const documentation = b.option(bool, "docs", "Generate documentation") orelse false;
 
+    // Add packages.
+    try addPackages(b, root);
+
     // Add main executable.
     const exe = b.addExecutable(.{
         .name = exe_name,
-        .root_source_file = b.path("src/main.zig"),
-        .target = target,
-        .optimize = optimize,
+        .root_module = root,
     });
     if (documentation) {
         const install_docs = b.addInstallDirectory(.{
@@ -56,12 +57,9 @@ pub fn build(b: *std.Build) void {
     exe.link_z_relro = relro;
     b.installArtifact(exe);
 
-    // Add packages.
-    try addPackages(b, exe);
-
     // Add executable options.
     const exe_options = b.addOptions();
-    exe.root_module.addOptions("build_options", exe_options);
+    root.addOptions("build_options", exe_options);
     exe_options.addOption([]const u8, "version", version);
     exe_options.addOption([]const u8, "exe_name", exe_name);
 
@@ -80,12 +78,16 @@ pub fn build(b: *std.Build) void {
     const test_step = b.step("test", "Run tests");
     for ([_][]const u8{ "main", "file", "gen", "wav" }) |module| {
         const test_name = b.fmt("{s}-tests", .{module});
-        const test_module = b.fmt("src/{s}.zig", .{module});
-        var exe_tests = b.addTest(.{
-            .name = test_name,
-            .root_source_file = b.path(test_module),
+        const test_filepath = b.fmt("src/{s}.zig", .{module});
+        const test_module = b.createModule(.{
+            .root_source_file = b.path(test_filepath),
             .target = target,
             .optimize = optimize,
+        });
+        try addPackages(b, test_module);
+        var exe_tests = b.addTest(.{
+            .name = test_name,
+            .root_module = test_module,
         });
         if (coverage) {
             exe_tests.setExecCmd(&[_]?[]const u8{
@@ -94,8 +96,7 @@ pub fn build(b: *std.Build) void {
                 null,
             });
         }
-        try addPackages(b, exe_tests);
-        exe_tests.root_module.addOptions("build_options", exe_options);
+        test_module.addOptions("build_options", exe_options);
         const run_unit_tests = b.addRunArtifact(exe_tests);
         test_step.dependOn(&run_unit_tests.step);
     }

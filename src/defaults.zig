@@ -1,4 +1,4 @@
-const wav = @import("wav");
+const wav = @import("wav.zig");
 
 // Default input file.
 pub const input = "/dev/urandom";
