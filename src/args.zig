@@ -1,4 +1,4 @@
-const wav = @import("wav");
+const wav = @import("wav.zig");
 const clap = @import("clap");
 
 // Banner text.
