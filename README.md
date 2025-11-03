@@ -46,6 +46,7 @@
   - [`duration`](#duration)
   - [`input`](#input)
   - [`output`](#output)
+- [Related Projects](#related-projects)
 - [Funding 💖](#funding-)
 - [Contributing 🌱](#contributing-)
 - [License ⚖️](#license-)
@@ -299,6 +300,10 @@ Sets the output file. It takes a filename as its argument.
 
 The default value is `output.wav`.
 
+## Related Projects
+
+- [linuxwavegui](https://github.com/Arcmyx/linuxwavegui) – A graphical interface for linuxwave with tempo shifting, pitch control, flawed (but still cool-sounding) MIDI generation, and an interactive piano for scale selection.
+
 ## Funding 💖
 
 If you find `linuxwave` and/or other projects on my [GitHub profile](https://github.com/orhun) useful, consider supporting me on [GitHub Sponsors](https://github.com/sponsors/orhun) or [becoming a patron](https://www.patreon.com/join/orhunp)!
@@ -318,7 +323,3 @@ Licensed under [The MIT License](./LICENSE).
 ## Copyright ⛓️
 
 Copyright © 2023-2024, [Orhun Parmaksız](mailto:orhunparmaksiz@gmail.com)
-
-## Related Projects
-
-- [linuxwavegui](https://github.com/Arcmyx/linuxwavegui) – A graphical interface for linuxwave with tempo shifting, pitch control, flawed (but still cool-sounding) MIDI generation, and an interactive piano for scale selection.
