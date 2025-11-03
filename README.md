@@ -321,5 +321,4 @@ Copyright © 2023-2024, [Orhun Parmaksız](mailto:orhunparmaksiz@gmail.com)
 
 ## Related Projects
 
-- **linuxwavegui** – A graphical interface for linuxwave with tempo shifting, pitch control, flawed (but still cool-sounding) MIDI generation, and an interactive piano for scale selection (upcoming).
-  [GitHub Repository](https://github.com/Arcmyx/linuxwavegui)
+- [linuxwavegui](https://github.com/Arcmyx/linuxwavegui) – A graphical interface for linuxwave with tempo shifting, pitch control, flawed (but still cool-sounding) MIDI generation, and an interactive piano for scale selection.
