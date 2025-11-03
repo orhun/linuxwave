@@ -319,7 +319,7 @@ Licensed under [The MIT License](./LICENSE).
 
 Copyright © 2023-2024, [Orhun Parmaksız](mailto:orhunparmaksiz@gmail.com)
 
-## Other Projects (this section was added by Arcmyx)
+## Related Projects
 
 - **linuxwavegui** – A graphical interface for linuxwave with tempo shifting, pitch control, flawed (but still cool-sounding) MIDI generation, and an interactive piano for scale selection (upcoming).
   [GitHub Repository](https://github.com/Arcmyx/linuxwavegui)
