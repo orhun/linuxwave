@@ -46,6 +46,7 @@
   - [`duration`](#duration)
   - [`input`](#input)
   - [`output`](#output)
+- [Related Projects](#related-projects)
 - [Funding 💖](#funding-)
 - [Contributing 🌱](#contributing-)
 - [License ⚖️](#license-)
@@ -298,6 +299,10 @@ You can provide _any_ type of file for this argument and it will generate music 
 Sets the output file. It takes a filename as its argument.
 
 The default value is `output.wav`.
+
+## Related Projects
+
+- [linuxwavegui](https://github.com/Arcmyx/linuxwavegui) – A graphical interface for linuxwave with tempo shifting, pitch control, flawed (but still cool-sounding) MIDI generation, and an interactive piano for scale selection.
 
 ## Funding 💖
 
