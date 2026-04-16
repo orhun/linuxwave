@@ -31,7 +31,7 @@ pub const Generator = struct {
     ///
     /// Returns an array that contains the amplitudes of the sound wave at a given point in time.
     pub fn generate(self: Generator, allocator: std.mem.Allocator, sample: u8) ![]u8 {
-        var buffer = std.ArrayList(u8).init(allocator);
+        var buffer: std.ArrayList(u8) = .empty;
         var i: usize = 0;
         while (i < sample_count) : (i += 1) {
             // Calculate the frequency according to the equal temperament.
@@ -45,9 +45,9 @@ pub const Generator = struct {
             // Apply the volume control.
             const volume: f32 = @floatFromInt(self.config.volume);
             amp = amp * volume / 100;
-            try buffer.append(@intFromFloat(amp));
+            try buffer.append(allocator, @trunc(amp));
         }
-        return buffer.toOwnedSlice();
+        return buffer.toOwnedSlice(allocator);
     }
 };
 
