@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2026-04-21
+
+### 📚 Documentation
+
+- *(readme)* Add 'Related Projects' section to README ([#46](https://github.com/orhun/linuxwave/issues/46))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(build)* Switch build structure to working on base modules & simplify imports ([#41](https://github.com/orhun/linuxwave/issues/41))
+- *(uncategorized)* [**breaking**] Adjust for Zig 0.16 ([#59](https://github.com/orhun/linuxwave/issues/59))
+
 ## [0.3.0] - 2025-03-07
 
 ### 🎵 Features
