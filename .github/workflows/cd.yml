@@ -41,7 +41,7 @@ jobs:
             aarch64-windows,
             arm-linux,
             riscv64-linux,
-            i386-linux
+            x86-linux
           ]
 
     steps:
