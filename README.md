@@ -67,7 +67,7 @@
 
 #### Prerequisites
 
-- [Zig](https://ziglang.org/download/) (`0.14`)
+- [Zig](https://ziglang.org/download/) (`0.16`)
 
 #### Instructions
 
