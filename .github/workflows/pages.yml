@@ -42,7 +42,7 @@ jobs:
           zig build -Ddocs=true
           mkdir website
           cp assets/index.html website
-          cp -r docs website
+          cp -r zig-out/docs website
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
