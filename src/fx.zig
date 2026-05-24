@@ -103,7 +103,7 @@ pub const Chain = struct {
 pub const EchoConfig = struct {
     /// Echo delay in milliseconds.
     delay_ms: usize = 250,
-    /// Amount of delayed signal fed back into the delay line.
+    /// Amount of delayed signal fed back into the delay line. Clamped to 0.0-1.0.
     feedback: f32 = 0.35,
     /// Wet/dry mix. 0 is dry, 1 is fully delayed.
     mix: f32 = 0.35,
@@ -199,7 +199,7 @@ pub const Echo = struct {
         if (self.delay.len == 0) return Error.Unprepared;
         try info.validateSamples(samples);
 
-        const feedback = audio.clampSample(self.config.feedback);
+        const feedback = std.math.clamp(self.config.feedback, 0.0, 1.0);
         const mix = std.math.clamp(self.config.mix, 0.0, 1.0);
 
         for (samples) |*sample| {
@@ -251,6 +251,27 @@ test "echo applies delayed signal" {
     try std.testing.expectApproxEqAbs(@as(f32, 0.5), samples[0], 0.001);
     try std.testing.expectApproxEqAbs(@as(f32, 0.5), samples[1], 0.001);
     try std.testing.expectApproxEqAbs(@as(f32, 0.25), samples[2], 0.001);
+}
+
+test "echo clamps negative feedback to zero" {
+    const allocator = std.testing.allocator;
+    const info: audio.Info = .{ .channels = 1, .sample_rate = 1000 };
+
+    var echo = Echo.init(.{
+        .delay_ms = 1,
+        .feedback = -0.5,
+        .mix = 1.0,
+    });
+    defer echo.deinit(allocator);
+
+    var samples = [_]f32{ 1.0, 0.0, 0.0 };
+    var chain: Chain = .{ .effects = &.{echo.effect()} };
+    try chain.prepare(allocator, .{ .audio = info });
+    try chain.process(&samples);
+
+    try std.testing.expectApproxEqAbs(@as(f32, 0.0), samples[0], 0.001);
+    try std.testing.expectApproxEqAbs(@as(f32, 1.0), samples[1], 0.001);
+    try std.testing.expectApproxEqAbs(@as(f32, 0.0), samples[2], 0.001);
 }
 
 test "chain rejects incomplete interleaved frame" {

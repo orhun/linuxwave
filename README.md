@@ -303,7 +303,9 @@ Enables a delay-line echo effect after music generation and before WAV encoding.
 
 Use `--echo` to enable the default echo. The tuning options `--echo-delay`, `--echo-feedback`, and `--echo-mix` also enable echo when specified.
 
-`--echo-delay` is measured in milliseconds. `--echo-feedback` controls how much delayed signal is fed back into the echo. `--echo-mix` controls the wet/dry balance, where `0.0` is fully dry and `1.0` is fully delayed.
+`--echo-delay` is measured in milliseconds. `--echo-feedback` controls how much delayed signal is fed back into the echo, clamped to `0.0` through `1.0`. `--echo-mix` controls the wet/dry balance, where `0.0` is fully dry and `1.0` is fully delayed.
+
+The output duration remains exactly the configured `--duration`; linuxwave does not append extra silence for the final echo repeats to decay.
 
 ### `input`
 
