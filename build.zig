@@ -66,9 +66,7 @@ pub fn build(b: *std.Build) void {
     // Create the run step and add arguments.
     const run_cmd = b.addRunArtifact(exe);
     run_cmd.step.dependOn(b.getInstallStep());
-    if (b.args) |args| {
-        run_cmd.addArgs(args);
-    }
+    run_cmd.addPassthruArgs();
 
     // Define the run step.
     const run_step = b.step("run", "Run the app");
@@ -85,19 +83,21 @@ pub fn build(b: *std.Build) void {
             .optimize = optimize,
         });
         try addPackages(b, test_module);
-        var exe_tests = b.addTest(.{
+        const exe_tests = b.addTest(.{
             .name = test_name,
             .root_module = test_module,
         });
+        test_module.addOptions("build_options", exe_options);
         if (coverage) {
-            exe_tests.setExecCmd(&[_]?[]const u8{
+            const kcov = b.addSystemCommand(&.{
                 "kcov",
                 "kcov-output",
-                null,
             });
+            kcov.addArtifactArg(exe_tests);
+            test_step.dependOn(&kcov.step);
+        } else {
+            const run_unit_tests = b.addRunArtifact(exe_tests);
+            test_step.dependOn(&run_unit_tests.step);
         }
-        test_module.addOptions("build_options", exe_options);
-        const run_unit_tests = b.addRunArtifact(exe_tests);
-        test_step.dependOn(&run_unit_tests.step);
     }
 }

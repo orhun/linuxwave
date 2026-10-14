@@ -10,6 +10,9 @@ on:
   schedule:
     - cron: "0 0 * * 0"
 
+env:
+  ZIG_VERSION: "0.17.0"
+
 jobs:
   build:
     name: "Build with args: '${{ matrix.OPTIMIZE }}'"
@@ -31,7 +34,7 @@ jobs:
       - name: Install Zig
         uses: mlugg/setup-zig@v2
         with:
-          version: 0.16.0
+          version: ${{ env.ZIG_VERSION }}
 
       - name: Show Zig version
         run: |
@@ -54,7 +57,7 @@ jobs:
       - name: Install Zig
         uses: mlugg/setup-zig@v2
         with:
-          version: 0.16.0
+          version: ${{ env.ZIG_VERSION }}
 
       - name: Install kcov
         run: |
@@ -86,7 +89,7 @@ jobs:
       - name: Install Zig
         uses: mlugg/setup-zig@v2
         with:
-          version: 0.16.0
+          version: ${{ env.ZIG_VERSION }}
 
       - name: Check formatting
         run: zig fmt --check .
