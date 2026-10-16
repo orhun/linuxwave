@@ -1,8 +1,11 @@
 const std = @import("std");
-const wav = @import("wav.zig");
-const gen = @import("gen.zig");
+pub const audio = @import("audio.zig");
+pub const fx = @import("fx.zig");
+pub const wav = @import("wav.zig");
+pub const gen = @import("gen.zig");
 const file = @import("file.zig");
 const args = @import("args.zig");
+const cli_effects = @import("cli_effects.zig");
 const defaults = @import("defaults.zig");
 const build_options = @import("build_options");
 const clap = @import("clap");
@@ -30,6 +33,7 @@ fn run(io: std.Io, allocator: std.mem.Allocator, output: *std.Io.Writer, argv: s
         .sample_rate = if (cli.args.rate) |rate| @intFromFloat(rate) else defaults.sample_rate,
         .format = if (cli.args.format) |format| format else defaults.format,
     };
+    const audio_info = encoder_config.audioInfo();
 
     // Create generator configuration.
     const scale = s: {
@@ -47,7 +51,8 @@ fn run(io: std.Io, allocator: std.mem.Allocator, output: *std.Io.Writer, argv: s
         .volume = if (cli.args.volume) |volume| volume else defaults.volume,
     };
     const duration = if (cli.args.duration) |duration| duration else defaults.duration;
-    const data_len = encoder_config.getDataLength(duration) / (gen.Generator.sample_count - 2);
+    const frame_count = audio_info.frameCount(duration);
+    const data_len = try std.math.divCeil(usize, frame_count, gen.Generator.sample_count);
 
     // Read data from a file or stdin.
     const input_file = if (cli.args.input) |input| input else defaults.input;
@@ -69,12 +74,27 @@ fn run(io: std.Io, allocator: std.mem.Allocator, output: *std.Io.Writer, argv: s
 
     // Generate music.
     const generator: gen.Generator = .init(generator_config);
-    var data: std.ArrayList(u8) = .empty;
+    var cli_fx: cli_effects.Effects = .{};
+    cli_fx.init(cli.args);
+    var effects = cli_fx.chain();
+    defer effects.deinit(allocator);
+    const fx_context: fx.Context = .{
+        .audio = audio_info,
+    };
+    var data: std.ArrayList(f32) = .empty;
+    errdefer data.deinit(allocator);
+    const target_sample_count = audio_info.sampleCount(frame_count);
     for (buffer) |v| {
-        const gen_data = try generator.generate(allocator, v);
-        defer allocator.free(gen_data);
-        try data.appendSlice(allocator, gen_data);
+        if (data.items.len >= target_sample_count) break;
+        {
+            const gen_data = try generator.generateSamples(allocator, v, audio_info);
+            defer allocator.free(gen_data);
+            const remaining_sample_count = target_sample_count - data.items.len;
+            try data.appendSlice(allocator, gen_data[0..@min(gen_data.len, remaining_sample_count)]);
+        }
     }
+    try effects.prepare(allocator, fx_context);
+    try effects.process(data.items);
 
     // Encode WAV.
     const out = if (cli.args.output) |out| out else defaults.output;
@@ -95,9 +115,10 @@ fn run(io: std.Io, allocator: std.mem.Allocator, output: *std.Io.Writer, argv: s
         fhandle = try std.Io.Dir.cwd().createFile(io, out, .{});
         break :w fhandle.?.writer(io, &write_buffer);
     };
-    const wav_data = try data.toOwnedSlice(allocator);
-    defer allocator.free(wav_data);
-    try wav.encode(&file_writer.interface, wav_data, encoder_config);
+    const samples = try data.toOwnedSlice(allocator);
+    defer allocator.free(samples);
+    try wav.encodePcmF32(&file_writer.interface, samples, encoder_config);
+    try file_writer.interface.flush();
 }
 
 /// Entry-point.
@@ -129,8 +150,45 @@ test "run" {
     };
     defer allocator.free(result);
     try std.testing.expectEqualStrings(
-        \\Reading 96 bytes from /dev/urandom
+        \\Reading 48 bytes from /dev/urandom
         \\Saving to output.wav
         \\
     , result);
+}
+
+test "run with echo flags" {
+    const allocator = std.testing.allocator;
+    const io = std.testing.io;
+    const output_path = ".zig-cache/tmp/linuxwave-echo-test.wav";
+    defer std.Io.Dir.cwd().deleteFile(io, output_path) catch {};
+
+    const argv = [_][*:0]const u8{
+        "linuxwave",
+        "--echo-delay",
+        "1",
+        "--echo-mix",
+        "0.5",
+        "-r",
+        "1000",
+        "-d",
+        "1",
+        "-i",
+        "build.zig",
+        "-o",
+        output_path,
+    };
+    const fake_args: std.process.Args = .{ .vector = &argv };
+    var allocating: std.Io.Writer.Allocating = .init(allocator);
+    try run(io, allocator, &allocating.writer, fake_args);
+    const result = try allocating.toOwnedSlice();
+    defer allocator.free(result);
+
+    try std.testing.expectEqualStrings(
+        \\Reading 1 bytes from build.zig
+        \\Saving to .zig-cache/tmp/linuxwave-echo-test.wav
+        \\
+    , result);
+
+    const stat = try std.Io.Dir.cwd().statFile(io, output_path, .{});
+    try std.testing.expectEqual(@as(u64, 2044), stat.size);
 }

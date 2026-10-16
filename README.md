@@ -44,6 +44,7 @@
   - [`format`](#format)
   - [`volume`](#volume)
   - [`duration`](#duration)
+  - [`echo`](#echo)
   - [`input`](#input)
   - [`output`](#output)
 - [Related Projects](#related-projects)
@@ -166,6 +167,12 @@ Read from stdin via giving `-` as input:
 cat README.md | linuxwave -i -
 ```
 
+Add an echo effect with a short delay:
+
+```sh
+linuxwave --echo-delay 120 --echo-feedback 0.4 --echo-mix 0.3 -o echo.wav
+```
+
 Write to stdout via giving `-` as output:
 
 ```
@@ -213,6 +220,10 @@ Options:
   -f, --format <FORMAT>          Sets the sample format [default: S16_LE]
   -v, --volume <VOL>             Sets the volume (0-100) [default: 50]
   -d, --duration <SECS>          Sets the duration [default: 20]
+  -e, --echo                     Enables the echo effect
+      --echo-delay <MS>          Sets echo delay in milliseconds [default: 250]
+      --echo-feedback <MIX>      Sets echo feedback (0.0-1.0) [default: 0.35]
+      --echo-mix <MIX>           Sets echo wet/dry mix (0.0-1.0) [default: 0.35]
   -i, --input <FILE>             Sets the input file [default: /dev/urandom]
   -o, --output <FILE>            Sets the output file [default: output.wav]
   -V, --version                  Display version information.
@@ -285,6 +296,16 @@ The default value is `50`.
 Sets the duration of the output file in seconds. It takes a float as its argument.
 
 The default value is `20` seconds.
+
+### `echo`
+
+Enables a delay-line echo effect after music generation and before WAV encoding.
+
+Use `--echo` to enable the default echo. The tuning options `--echo-delay`, `--echo-feedback`, and `--echo-mix` also enable echo when specified.
+
+`--echo-delay` is measured in milliseconds. `--echo-feedback` controls how much delayed signal is fed back into the echo, clamped to `0.0` through `1.0`. `--echo-mix` controls the wet/dry balance, where `0.0` is fully dry and `1.0` is fully delayed.
+
+The output duration remains exactly the configured `--duration`; linuxwave does not append extra silence for the final echo repeats to decay.
 
 ### `input`
 

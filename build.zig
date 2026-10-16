@@ -74,7 +74,7 @@ pub fn build(b: *std.Build) void {
 
     // Add tests.
     const test_step = b.step("test", "Run tests");
-    for ([_][]const u8{ "main", "file", "gen", "wav" }) |module| {
+    for ([_][]const u8{ "main", "file", "gen", "wav", "audio", "fx", "cli_effects" }) |module| {
         const test_name = b.fmt("{s}-tests", .{module});
         const test_filepath = b.fmt("src/{s}.zig", .{module});
         const test_module = b.createModule(.{

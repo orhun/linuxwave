@@ -20,6 +20,10 @@ pub const params = clap.parseParamsComptime(
     \\-f, --format      <FORMAT>  Sets the sample format [default: S16_LE]
     \\-v, --volume      <VOL>     Sets the volume (0-100) [default: 50]
     \\-d, --duration    <SECS>    Sets the duration [default: 20]
+    \\-e, --echo                  Enables the echo effect
+    \\    --echo-delay <MS>       Sets echo delay in milliseconds [default: 250]
+    \\    --echo-feedback <MIX>   Sets echo feedback (0.0-1.0) [default: 0.35]
+    \\    --echo-mix <MIX>        Sets echo wet/dry mix (0.0-1.0) [default: 0.35]
     \\-i, --input       <FILE>    Sets the input file [default: /dev/urandom]
     \\-o, --output      <FILE>    Sets the output file [default: output.wav]
     \\-V, --version               Display version information.
@@ -36,6 +40,8 @@ pub const parsers = .{
     .HZ = clap.parsers.float(f32),
     .VOL = clap.parsers.int(u8, 0),
     .SECS = clap.parsers.int(usize, 0),
+    .MS = clap.parsers.int(usize, 0),
+    .MIX = clap.parsers.float(f32),
     .FILE = clap.parsers.string,
     .FORMAT = clap.parsers.enumeration(wav.Format),
 };
